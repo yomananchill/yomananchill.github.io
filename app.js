@@ -72,11 +72,6 @@ const setTopbarH = () =>
 new ResizeObserver(setTopbarH).observe(topbar);
 setTopbarH();
 
-/* the Writing link only exists once something is published */
-if (typeof POSTS !== "undefined" && POSTS.length) {
-  document.querySelector('.nav a[data-route="/writing"]')?.removeAttribute("hidden");
-}
-
 /* header condenses once you leave the top of the page */
 addEventListener("scroll", () => {
   document.querySelector(".topbar").classList.toggle("condensed", scrollY > 24);
@@ -129,7 +124,7 @@ document.querySelector(".foot").innerHTML = `
       <a href="#/">Index</a>
       <a href="#/disclosures">Disclosures</a>
       <a href="#/audits">Audits</a>
-      ${POSTS_SORTED().length ? `<a href="#/writing">Writing</a>` : ""}
+      <a href="#/writing">Writing</a>
     </nav>
 
     <nav class="foot-col" aria-label="Elsewhere">
@@ -728,7 +723,9 @@ function viewWriting() {
             <div class="card-foot"><span>${esc(fmt(p.date))}</span>
               <span class="card-go">Read <i>&rarr;</i></span></div>
           </a>`).join("")}</div>`
-      : `<p class="empty">Nothing published yet.</p>`}
+      : `<p class="empty">Nothing published yet.<br>
+           <span style="font-size:14px">Writeups on the disclosure record are
+           <a href="#/disclosures">over here</a>.</span></p>`}
   </div>`;
 }
 
