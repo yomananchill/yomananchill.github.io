@@ -11,7 +11,7 @@ const DATA = {
     status: "Active",
     fileNo: "0M4N",
     email: "notmanan.ctf@gmail.com",
-    github: "0xManan",
+    github: "yomananchill",
     twitter: "0xManan",
     linkedin: "manan-patel-4330101b4",
     summary:
