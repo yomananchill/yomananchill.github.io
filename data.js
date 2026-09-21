@@ -11,7 +11,7 @@ const DATA = {
     status: "Active",
     fileNo: "0M4N",
     email: "notmanan.ctf@gmail.com",
-    github: "yomananchill",
+    github: "0xManan",
     twitter: "0xManan",
     linkedin: "manan-patel-4330101b4",
     summary:
@@ -197,8 +197,8 @@ const DATA = {
     {
       name: "Kryptonite",
       kind: "Tool",
-      url: "https://github.com/yomananchill/Kryptonite",
-      linkLabel: "github.com/yomananchill/Kryptonite",
+      url: "https://github.com/0xManan/Kryptonite",
+      linkLabel: "github.com/0xManan/Kryptonite",
       body:
         "RAM acquisition tool for forensic analysis on Windows and Linux, written in PowerShell and Python. Built for incident responders who need a memory image without a lengthy setup.",
       tags: ["DFIR", "PowerShell", "Python"],
@@ -206,8 +206,8 @@ const DATA = {
     {
       name: "SecureByte",
       kind: "Tool",
-      url: "https://github.com/yomananchill/SecureByte",
-      linkLabel: "github.com/yomananchill/SecureByte",
+      url: "https://github.com/0xManan/SecureByte",
+      linkLabel: "github.com/0xManan/SecureByte",
       body:
         "Python tool built alongside my published cryptography research, using layered AES + RSA encryption. Research artifact, published openly.",
       tags: ["Cryptography", "Python"],
@@ -227,30 +227,30 @@ const DATA = {
     {
       title: "KhataBook Spark Award",
       rank: "Internal excellence award",
-      when: "2025",
+      when: "2025 & 2026",
       body:
         "For carrying information security and audit across several legal entities at once, on deadlines set by regulators rather than by us.",
     },
     {
-      title: "Pentathon",
+      title: "Pentathon CTF",
       rank: "Finalist · top 25",
       when: "2024",
-      body: "The national CTF run by AICTE and NCIIPC. Finished inside the top 25 of roughly eight thousand entrants.",
+      body: "The national CTF, run by AICTE and NCIIPC. Finished inside the top 25 of roughly eight thousand entrants.",
     },
     {
-      title: "Anveshanam",
+      title: "Anveshanam CTF",
       rank: "Top 20",
       when: "2024",
       body: "Run by IIT Jammu with DRDO. Top twenty of about fifteen hundred.",
     },
     {
-      title: "KAVACH",
+      title: "Kavach Hackathon",
       rank: "Finalist · top 5 of 3,900",
       when: "2023",
-      body: "National hackathon. We built one-click memory acquisition for responders who need an image before somebody reboots the box. It became Kryptonite.",
+      body: "National level. We built one-click memory acquisition for responders who need an image before somebody reboots the box. It became Kryptonite.",
     },
     {
-      title: "HACKVENGERS",
+      title: "Hackvengers Hackathon",
       rank: "Winners · first of 120",
       when: "2023",
       body: "Won outright against a hundred and twenty teams over a single weekend build.",
@@ -259,7 +259,7 @@ const DATA = {
       title: "IWCON CTF",
       rank: "Runners up",
       when: "2023",
-      body: "Second place at the Infosec Writeups conference CTF, against a field of around a thousand.",
+      body: "Second place at the Infosec Writeups conference, against a field of around a thousand.",
     },
   ],
 };

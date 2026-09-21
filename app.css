@@ -106,7 +106,8 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
   /* stop it reaching the copy: gone before the lower content band */
   -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 44%,transparent 76%);
           mask-image:linear-gradient(to bottom,#000 0%,#000 44%,transparent 76%)}
-.cursorlayer{position:fixed;inset:0;z-index:60;pointer-events:none}
+.cursorlayer{position:fixed;inset:0;z-index:60;pointer-events:none;
+  transition:opacity var(--mid) var(--ease)}
 .topbar,main,.foot{position:relative;z-index:1}
 .topbar{z-index:50}
 

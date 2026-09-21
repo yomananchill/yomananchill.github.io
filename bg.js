@@ -153,7 +153,7 @@
       if (inReticle) {
         const x = Math.round(rx) + 0.5, y = Math.round(ry) + 0.5;
 
-        uctx.globalAlpha = 0.2 * power;
+        uctx.globalAlpha = 0.14 * power;
         uctx.strokeStyle = INK;
         uctx.lineWidth = 1;
         uctx.beginPath();
@@ -162,12 +162,12 @@
         uctx.stroke();
 
         // an outline, not a block: the system arrow marks the point, this frames it
-        uctx.globalAlpha = 0.55 * power;
+        uctx.globalAlpha = 0.4 * power;
         uctx.strokeStyle = INK;
         uctx.lineWidth = 1;
         uctx.strokeRect(x - 6.5, y - 6.5, 13, 13);
 
-        uctx.globalAlpha = 0.3 * power;
+        uctx.globalAlpha = 0.26 * power;
         uctx.font = `10px "JetBrains Mono", ui-monospace, monospace`;
         uctx.fillText(`x: ${Math.round(rx)}`, rx + 15, ry - 40);
         uctx.fillText(`y: ${Math.round(ry)}`, rx + 15, ry - 27);
@@ -203,6 +203,9 @@
     addEventListener("scroll", () => {
       // keep the base 0.62 from CSS rather than overriding it back to 1
       cv.style.opacity = (0.62 * Math.max(0.16, 1 - scrollY / 620)).toFixed(3);
+      // the cursor overlay belongs to the hero; sweeping lines across body copy
+      // while someone is reading is just noise
+      ui.style.opacity = Math.max(0, 1 - scrollY / 420).toFixed(3);
     }, { passive: true });
 
     addEventListener("resize", () => { size(); if (still()) render(performance.now()); }, { passive: true });
