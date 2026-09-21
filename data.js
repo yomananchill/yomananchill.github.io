@@ -24,18 +24,20 @@ const DATA = {
 
   stats: [
     { n: "05", label: "CVEs disclosed" },
-    { n: "06", label: "certifications" },
+    { n: "08", label: "certifications" },
     { n: "05", label: "CTF podiums" },
     { n: "04", label: "years offensive" },
   ],
 
-  /* Issuers verified 2026-09-21. PT1 is TryHackMe's Junior Penetration Tester -
-     not "Level 1", which is what I had. Check the rest against your certificates. */
+  /* Issuers verified against LinkedIn 2026-09-22. PT1 is TryHackMe's Junior
+     Penetration Tester, not "Level 1". CRT and ACP added from the same source. */
   clearances: [
     { id: "CRTO", full: "Certified Red Team Operator", by: "Zero-Point Security", group: "Offensive" },
+    { id: "CRT",  full: "Certified Red Teamer", by: "The SecOps Group", group: "Offensive" },
     { id: "CRTA", full: "Certified Red Team Analyst", by: "CyberWarFare Labs", group: "Offensive" },
     { id: "PT1",  full: "Junior Penetration Tester", by: "TryHackMe", group: "Offensive" },
     { id: "eJPT", full: "Junior Penetration Tester", by: "INE Security", group: "Offensive" },
+    { id: "ACP",  full: "APIsec Certified Practitioner", by: "APIsec University", group: "Offensive" },
     { id: "CNSP", full: "Certified Network Security Practitioner", by: "The SecOps Group", group: "Defensive" },
     { id: "CAP",  full: "Certified AppSec Practitioner", by: "The SecOps Group", group: "Defensive" },
   ],
