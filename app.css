@@ -369,6 +369,8 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
   overflow-x:auto;margin:0 0 var(--s4)}
 .prose pre code{background:none;padding:0;font-size:12.5px;line-height:1.7}
 .prose hr{border:0;height:1px;background:var(--line);margin:var(--s7) 0}
+.prose img{max-width:100%;height:auto;display:block;margin:var(--s5) 0;
+  border:1px solid var(--line)}
 .post-card{border-left-color:var(--line-2)}
 .prose h2{font-size:clamp(24px,3vw,32px);margin:var(--s8) 0 var(--s4);
   scroll-margin-top:calc(var(--topbar-h,56px) + var(--s5))}
