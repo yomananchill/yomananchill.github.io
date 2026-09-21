@@ -256,7 +256,7 @@ const DATA = {
       body: "Won outright against a hundred and twenty teams over a single weekend build.",
     },
     {
-      title: "Infosec Writeups CTF",
+      title: "IWCON CTF",
       rank: "Runners up",
       when: "2023",
       body: "Second place at the annual conference CTF, against a field of around a thousand.",
