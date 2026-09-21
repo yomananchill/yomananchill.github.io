@@ -1,4 +1,4 @@
-# How to publish a post
+# How to publish a blog post
 
 Two files. Both editable in the GitHub web editor — no tooling, no build.
 
@@ -38,11 +38,11 @@ Open `posts/index.js` and add an entry at the top of the array:
 },
 ```
 
-Commit. The post appears at `/#/w/your-slug` and in the Writing list.
+Commit. The post appears at `/#/b/your-slug` and in the Blogs list.
 
 ## Notes
 
-- The Writing nav link only appears once there is at least one post.
+- The Blogs page is always linked; with no posts it shows an empty state.
 - Posts are fetched at read time, so a missing `.md` shows an error on that
   post's page only — the rest of the site is unaffected.
 - Nothing here is coupled to the disclosure record. Adding posts cannot break it.

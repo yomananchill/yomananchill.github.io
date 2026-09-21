@@ -1,6 +1,6 @@
 # yomananchill
 
-Personal site for Manan Patel (`0xManan`) — disclosure record, audit corpus, writing.
+Personal site for Manan Patel (`0xManan`) — disclosure record, audit corpus, blogs.
 
 Static HTML, CSS and vanilla JS. **No build step, no dependencies, no install.**
 Open `index.html` over any static server and it runs.
@@ -16,7 +16,7 @@ Open `index.html` over any static server and it runs.
 | `data.js` | Identity, work history, projects, certifications, commendations. |
 | `reports.js` | The disclosure record. |
 | `audits.js` | Codebases under review. **Contains no findings, deliberately.** |
-| `posts/` | Writing. See `posts/HOW-TO-POST.md`. |
+| `posts/` | Blog posts. See `posts/HOW-TO-POST.md`. |
 
 ## Editing
 

@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
-   Writing index.
+   Blog index.
 
    To publish a post:
      1. add a file at  posts/<slug>.md

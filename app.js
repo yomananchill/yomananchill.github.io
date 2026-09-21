@@ -124,7 +124,7 @@ document.querySelector(".foot").innerHTML = `
       <a href="#/">Index</a>
       <a href="#/disclosures">Disclosures</a>
       <a href="#/audits">Audits</a>
-      <a href="#/writing">Writing</a>
+      <a href="#/blogs">Blogs</a>
     </nav>
 
     <nav class="foot-col" aria-label="Elsewhere">
@@ -706,17 +706,17 @@ function md(src) {
   return out.join("\n");
 }
 
-function viewWriting() {
+function viewBlogs() {
   const list = POSTS_SORTED();
   return `
   <div class="shell pb">
-    <div class="crumbs"><a href="#/">Index</a> <span>/</span> <span>Writing</span></div>
-    <h1 class="page-h1">Writing</h1>
+    <div class="crumbs"><a href="#/">Index</a> <span>/</span> <span>Blogs</span></div>
+    <h1 class="page-h1">Blogs</h1>
     <p class="page-lede">Notes on what I have been reading and breaking.</p>
     <h2 class="sr-only">Posts</h2>
     ${list.length
       ? `<div class="cards">${list.map((p, i) => `
-          <a class="card post-card reveal" style="--i:${i}" href="#/w/${esc(p.slug)}">
+          <a class="card post-card reveal" style="--i:${i}" href="#/b/${esc(p.slug)}">
             <div class="card-top">${(p.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
             <h3>${esc(p.title)}</h3>
             <p>${esc(p.summary || "")}</p>
@@ -751,7 +751,7 @@ function viewPost(slug) {
   <div class="shell">
     <div class="crumbs">
       <a href="#/">Index</a> <span>/</span>
-      <a href="#/writing">Writing</a> <span>/</span>
+      <a href="#/blogs">Blogs</a> <span>/</span>
       <span>${esc(p.date)}</span>
     </div>
     <header class="art-head">
@@ -859,9 +859,9 @@ function paint() {
     FILTERS.sort = params.get("sort") || "date";
     main.innerHTML = viewDisclosures();
     wireDisclosures();
-  } else if (path === "/writing") {
-    main.innerHTML = viewWriting();
-  } else if (path.startsWith("/w/")) {
+  } else if (path === "/blogs" || path === "/writing") {
+    main.innerHTML = viewBlogs();
+  } else if (path.startsWith("/b/") || path.startsWith("/w/")) {
     main.innerHTML = viewPost(path.slice(3));
   } else if (path === "/audits") {
     AUDIT_LANG = params.get("lang") || "";
@@ -878,8 +878,9 @@ function paint() {
   const label = rep ? rep.short
     : path === "/disclosures" ? "Disclosures"
     : path === "/audits" ? "Audits"
-    : path === "/writing" ? "Writing"
-    : path.startsWith("/w/") ? (POSTS_SORTED().find((x) => x.slug === path.slice(3))?.title || "Writing")
+    : (path === "/blogs" || path === "/writing") ? "Blogs"
+    : (path.startsWith("/b/") || path.startsWith("/w/"))
+        ? (POSTS_SORTED().find((x) => x.slug === path.slice(3))?.title || "Blogs")
     : "";
   document.title = label ? `${label} — ${I.name}` : `${I.name} — ${I.role}`;
 
