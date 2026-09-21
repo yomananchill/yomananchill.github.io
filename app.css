@@ -66,6 +66,10 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+/* Author `display` beats the UA stylesheet's [hidden] rule, and the touch block
+   sets display:inline-flex on .nav a — which leaked the hidden Writing link on
+   phones. Keep this above everything that sets display. */
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 
 body{
