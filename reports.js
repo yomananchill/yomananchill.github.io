@@ -29,9 +29,9 @@ const REPORTS = [
     summary:
       "TFSMLayer in keras/src/export/tfsm_layer.py calls tf.saved_model.load(filepath) from its constructor without honouring safe_mode, and serialises the attacker-controllable filepath through get_config(). With no from_config() override to reject it, a .keras archive can point at an attacker-supplied SavedModel and have it loaded even when safe_mode=True.",
     root:
-      "safe_mode exists to refuse any deserialization path that can run attacker code. TFSMLayer sat outside that contract: the constructor loaded whatever path it was handed, and because get_config() round-trips that path, the value survives into a saved archive. Deserialising the archive reconstructs the layer, the constructor runs, and the external SavedModel is loaded. The attacker's TensorFlow graph then executes as part of ordinary model inference — not at load time where a reviewer might be watching, but later, when the model is used.",
+      "safe_mode exists to refuse any deserialization path that can run attacker code. TFSMLayer sat outside that contract: the constructor loaded whatever path it was handed, and because get_config() round-trips that path, the value survives into a saved archive. Deserialising the archive reconstructs the layer, the constructor runs, and the external SavedModel is loaded. The attacker's TensorFlow graph then executes as part of ordinary model inference - not at load time where a reviewer might be watching, but later, when the model is used.",
     impact:
-      "A malicious .keras model pulled from a hub or introduced through a supply-chain compromise runs attacker-controlled graph operations — file read and write, resource exhaustion — with the privileges of whatever process performs inference, despite safe_mode being on.",
+      "A malicious .keras model pulled from a hub or introduced through a supply-chain compromise runs attacker-controlled graph operations - file read and write, resource exhaustion - with the privileges of whatever process performs inference, despite safe_mode being on.",
     fix: "A from_config() override now raises when safe_mode is enabled, forcing an explicit opt-in for unsafe deserialization.",
   },
   {
@@ -46,9 +46,9 @@ const REPORTS = [
     url: "https://github.com/keras-team/keras/pull/23168",
     tags: ["AI/ML", "Model Loading", "Incomplete Fix"],
     summary:
-      "CVE-2026-9337 and CVE-2026-9630 were closed by centralising HDF5 access in two hardened accessors, safe_get_h5_group() and safe_get_h5_dataset(), which reject h5py ExternalLink and SoftLink. Both determined the link type with h5py's get(name, getclass=True, getlink=True) — which reports the class of the final path component only. Loaders pass multi-component, attacker-controlled names straight in.",
+      "CVE-2026-9337 and CVE-2026-9630 were closed by centralising HDF5 access in two hardened accessors, safe_get_h5_group() and safe_get_h5_dataset(), which reject h5py ExternalLink and SoftLink. Both determined the link type with h5py's get(name, getclass=True, getlink=True) - which reports the class of the final path component only. Loaders pass multi-component, attacker-controlled names straight in.",
     root:
-      "A name like \"ext/kernel\" asks h5py to resolve ext first and then report on kernel. If ext is an ExternalLink, h5py follows it into another file on the victim's disk, and the guard — looking only at kernel, an ordinary HardLink — waves it through. The follow-up checks on dataset.external and dataset.is_virtual do not help either, because by the time they run the object has already resolved: it is a perfectly ordinary dataset that simply lives somewhere else. The legacy .h5 loader passes weight_names and layer_names read verbatim from file attributes, and the v3 .keras loader passes multi-component layer paths, so the attacker controls the string either way.",
+      "A name like \"ext/kernel\" asks h5py to resolve ext first and then report on kernel. If ext is an ExternalLink, h5py follows it into another file on the victim's disk, and the guard - looking only at kernel, an ordinary HardLink - waves it through. The follow-up checks on dataset.external and dataset.is_virtual do not help either, because by the time they run the object has already resolved: it is a perfectly ordinary dataset that simply lives somewhere else. The legacy .h5 loader passes weight_names and layer_names read verbatim from file attributes, and the v3 .keras loader passes multi-component layer paths, so the attacker controls the string either way.",
     impact:
       "A victim loading an attacker-supplied .h5 or .keras file has arbitrary HDF5 files from their host read into the model's weights and returned to the attacker. Works at default settings with safe_mode=True.",
     fix: "The accessors now split the name and run the link-class check on every component rather than letting h5py resolve nested paths. Landed in 3.15.1.",
@@ -80,15 +80,15 @@ const REPORTS = [
     deck: "The permission check ran only for endpoints someone had remembered to list.",
     repo: "mlflow/mlflow", cls: "Broken Access Control", sev: "critical", cvss: "9.9",
     date: "2026-02-20", state: "Fixed", cve: "",
-    ident: "MLflow PR #25066", fixedIn: "MLflow 3.11.0 – 3.16.0",
+    ident: "MLflow PR #25066", fixedIn: "MLflow 3.11.0 - 3.16.0",
     url: "https://github.com/mlflow/mlflow/pull/25066",
     tags: ["AI/ML", "MLOps"],
     summary:
-      "A long list of newer endpoints — dataset create/get/delete, webhook create/delete, StartTraceV3, GetTraceInfoV3, BatchGetTraces, assessment create/delete — were missing from BEFORE_REQUEST_HANDLERS in the auth plugin. get_before_request_handler returned None for them, and the calling code guarded on `if validator:`, so no check ran at all.",
+      "A long list of newer endpoints - dataset create/get/delete, webhook create/delete, StartTraceV3, GetTraceInfoV3, BatchGetTraces, assessment create/delete - were missing from BEFORE_REQUEST_HANDLERS in the auth plugin. get_before_request_handler returned None for them, and the calling code guarded on `if validator:`, so no check ran at all.",
     root:
       "The authorization layer was a lookup table keyed by endpoint, and an endpoint absent from the table failed open rather than closed. Every feature added after the table was written arrived unprotected by default, and nothing in the build complained. The bug is not in any one handler; it is in choosing allow as the behaviour for the unknown case.",
     impact:
-      "Any authenticated low-privilege user could read, poison or delete other teams' datasets, traces and assessments across experiments, and create webhooks — which yields authenticated SSRF as a bonus — with RBAC fully bypassed.",
+      "Any authenticated low-privilege user could read, poison or delete other teams' datasets, traces and assessments across experiments, and create webhooks - which yields authenticated SSRF as a bonus - with RBAC fully bypassed.",
     fix: "Closed in stages: webhook CRUD gated admin-only in 3.11.0, trace and assessment endpoints registered in 3.13.0, dataset routes gated on experiment permission in 3.16.0 with a fail-closed prefix branch and a CI coverage guard so the table cannot silently fall behind again.",
   },
   {
@@ -103,11 +103,11 @@ const REPORTS = [
     url: "https://github.com/advisories/GHSA-2cm6-r77w-6g96",
     tags: ["AI/ML", "MLOps"],
     summary:
-      "The v3.0 Trace Assessment endpoints — create, get, update and delete assessment — were never added to BEFORE_REQUEST_VALIDATORS, and the handlers themselves performed no ownership check. Because unmapped routes defaulted to allow-if-authenticated, any user could perform full CRUD on assessments attached to other users' traces in private experiments.",
+      "The v3.0 Trace Assessment endpoints - create, get, update and delete assessment - were never added to BEFORE_REQUEST_VALIDATORS, and the handlers themselves performed no ownership check. Because unmapped routes defaulted to allow-if-authenticated, any user could perform full CRUD on assessments attached to other users' traces in private experiments.",
     root:
       "Assessments hang off a trace, which hangs off an experiment, and the experiment is where permissions actually live. Nothing in the assessment handlers walked back up that chain, so there was no point at which the request's identity was compared against the owner of the data being touched.",
     impact:
-      "Any low-privileged user could read, forge, tamper with or delete another user's evaluation and feedback data across the whole platform — the data teams use to decide whether a model is behaving.",
+      "Any low-privileged user could read, forge, tamper with or delete another user's evaluation and feedback data across the whole platform - the data teams use to decide whether a model is behaving.",
     fix: "The four endpoints were registered against validate_can_read_trace_by_trace_id and validate_can_update_trace_by_trace_id, so assessment access now inherits the parent experiment's permissions.",
   },
   {
@@ -124,7 +124,7 @@ const REPORTS = [
     summary:
       "In _create_model_version, supplying the tag mlflow.prompt.is_prompt made _is_prompt_request() return true, which skipped _validate_source_run and _validate_source_model entirely. With validation out of the way, source could be set to any local path and the contents retrieved through the model-versions get-artifact endpoint.",
     root:
-      "Prompts were treated as a special case that did not need the same source validation as models, and the marker for that special case was a tag — a value supplied by the caller. The branch that decides whether to validate was therefore controlled by the party being validated.",
+      "Prompts were treated as a special case that did not need the same source validation as models, and the marker for that special case was a tag - a value supplied by the caller. The branch that decides whether to validate was therefore controlled by the party being validated.",
     impact:
       "Read any file the server can read: /etc/passwd, /proc/self/environ, cloud credentials, SSH keys. Unauthenticated where auth is not enabled, which is the default posture for a great many tracking servers.",
     fix: "The branch was inverted so prompt requests are validated rather than exempted, rejecting file:// sources and schemeless absolute paths and applying traversal checks to the rest.",
@@ -141,11 +141,11 @@ const REPORTS = [
     url: "https://github.com/mlflow/mlflow/commit/8f9c8a53af90842944101eb8b7d60706822c81bc",
     tags: ["AI/ML", "MLOps"],
     summary:
-      "init_fastapi_security installed Starlette's CORSMiddleware with allow_origins=[\"*\"] and allow_credentials=True even in the non-wildcard branch — the one that runs by default. Every API response therefore carried a permissive Access-Control-Allow-Origin for any site.",
+      "init_fastapi_security installed Starlette's CORSMiddleware with allow_origins=[\"*\"] and allow_credentials=True even in the non-wildcard branch - the one that runs by default. Every API response therefore carried a permissive Access-Control-Allow-Origin for any site.",
     root:
       "There were two branches for two postures and both ended up setting the same wildcard, so the configuration knob did nothing. A compensating CORSBlockingMiddleware existed but only covered /api/ paths, and it could not help regardless: the outer middleware had already written the permissive header onto the response.",
     impact:
-      "Any page a logged-in user visits could issue authenticated cross-origin reads and writes against their MLflow server — enumerate experiments, runs and models, delete experiments, register malicious model versions.",
+      "Any page a logged-in user visits could issue authenticated cross-origin reads and writes against their MLflow server - enumerate experiments, runs and models, delete experiments, register malicious model versions.",
     fix: "The non-wildcard branch now passes the configured origins through, with an explicit localhost pattern, and the API-endpoint test was widened to cover the /ajax-api/ prefix.",
   },
   {
@@ -161,7 +161,7 @@ const REPORTS = [
     summary:
       "_create_webhook() stored a user-supplied webhook URL with no scheme filtering and no allowlist, and _send_webhook_request() issued HTTP POSTs straight to that URL whenever the webhook was tested or triggered.",
     root:
-      "Webhooks are a deliberate outbound-request feature, which is exactly why the destination needs constraining. Nothing on the create path rejected a scheme, a loopback address, a private range or a link-local address, and nothing on the delivery path re-checked before sending. The attacker never needs to reach the internal service — they only need the server to reach it, and the server is already inside the perimeter.",
+      "Webhooks are a deliberate outbound-request feature, which is exactly why the destination needs constraining. Nothing on the create path rejected a scheme, a loopback address, a private range or a link-local address, and nothing on the delivery path re-checked before sending. The attacker never needs to reach the internal service - they only need the server to reach it, and the server is already inside the perimeter.",
     impact:
       "An authenticated attacker makes the MLflow backend issue requests to internal services and cloud metadata endpoints, turning a tracking server into a pivot for credential theft and internal reconnaissance.",
     fix: "Webhook destinations are validated and allowlisted, with private, loopback and metadata ranges rejected.",
@@ -199,7 +199,7 @@ const REPORTS = [
     summary:
       "The Feature Server exposed an unauthenticated POST /read-document endpoint that passed the caller's file_path straight to open(), with no allowlist, no base directory and no canonicalization, and accepted absolute paths.",
     root:
-      "There was no boundary to escape. Traversal sequences were not even necessary — an absolute path was accepted as-is. The endpoint appears to have been built for local development convenience and shipped on a server that listens on the network.",
+      "There was no boundary to escape. Traversal sequences were not even necessary - an absolute path was accepted as-is. The endpoint appears to have been built for local development convenience and shipped on a server that listens on the network.",
     impact:
       "Unauthenticated remote read of any file the process can open: feature_store.yaml and the credentials in it, Kubernetes service-account tokens, whatever else is on the box. Enough to reach the databases and cloud accounts behind it.",
     fix: "The /read-document and /save-document handlers were removed outright in 0.60.0, along with their UI-server counterparts.",
@@ -217,7 +217,7 @@ const REPORTS = [
     summary:
       "add_events registered Socket.IO handlers for generation and cancellation that used the socket's sid directly as the client identity, with no authentication or authorization, and tracked generation state in global flags shared across every connected client.",
     root:
-      "Two failures compounding. A socket ID is an identifier, not a credential — it says which connection you are, never that you are allowed to do anything — so every handler was effectively public. And the state those handlers mutate is global, so one client's cancellation is everyone's cancellation. Even with authentication bolted on, the shared-state bug alone lets one connection interfere with another's work.",
+      "Two failures compounding. A socket ID is an identifier, not a credential - it says which connection you are, never that you are allowed to do anything - so every handler was effectively public. And the state those handlers mutate is global, so one client's cancellation is everyone's cancellation. Even with authentication bolted on, the shared-state bug alone lets one connection interfere with another's work.",
     impact:
       "An unauthenticated client can monopolise generation resources to deny service to every user, or cancel and corrupt other users' in-progress work through the shared global flags.",
     fix: "Socket.IO events are authenticated and authorized, global generation state was replaced with per-client state, and rate limiting was added.",
@@ -233,7 +233,7 @@ const REPORTS = [
     url: "https://www.cve.org/CVERecord?id=CVE-2025-6210",
     tags: ["AI/ML", "Data Ingestion"],
     summary:
-      "ObsidianReader.load_data() enforced its vault boundary with Path.resolve() and a startswith() check. Hardlinks survive resolve() — they are not links to a path, they are second names for the same inode — so a hardlink created inside the vault and pointing at a system file was read and returned as a document.",
+      "ObsidianReader.load_data() enforced its vault boundary with Path.resolve() and a startswith() check. Hardlinks survive resolve() - they are not links to a path, they are second names for the same inode - so a hardlink created inside the vault and pointing at a system file was read and returned as a document.",
     root:
       "The check asked the right question in the wrong vocabulary. resolve() collapses symlinks and relative segments, so afterwards the path genuinely does sit under the vault and startswith() agrees. A hardlink has no indirection left to collapse: the file simply has two names and one of them is inside. Passing followlinks=False to os.walk does not help either, because that flag governs symlinks. The boundary was path-shaped; the attack was inode-shaped.",
     impact:
@@ -251,7 +251,7 @@ const REPORTS = [
     url: "https://www.cve.org/CVERecord?id=CVE-2025-6209",
     tags: ["AI/ML", "Multimodal"],
     summary:
-      "encode_image in generic_utils.py opened an attacker-controllable image_path — reachable through ImageDocument — with no sanitization or canonicalization. Traversal sequences and absolute paths caused it to read and base64-encode arbitrary files on the host.",
+      "encode_image in generic_utils.py opened an attacker-controllable image_path - reachable through ImageDocument - with no sanitization or canonicalization. Traversal sequences and absolute paths caused it to read and base64-encode arbitrary files on the host.",
     root:
       "The function's contract was \"give me an image, I will encode it\", and it honoured that literally. Because the encoded result is returned to the caller, the read is not blind: whatever the path resolves to comes back in full, through a normal multimodal document flow. No filesystem boundary was ever established, so there was nothing for traversal to escape.",
     impact:

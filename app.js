@@ -77,7 +77,7 @@ addEventListener("scroll", () => {
   document.querySelector(".topbar").classList.toggle("condensed", scrollY > 24);
 }, { passive: true });
 
-/* nav labels scramble on hover — 40ms tick, 8 iterations */
+/* nav labels scramble on hover - 40ms tick, 8 iterations */
 const GLYPHS = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}<>?/\\|~";
 function scramble(el) {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -152,7 +152,7 @@ const identTag = (r) => {
   const id = identOf(r);
   if (!id) return "";
   return `<span class="tag cve${r.credited ? "" : " uncredited"}"
-    ${r.credited ? "" : 'title="Found independently — identifier assigned to the first reporter"'}>${esc(id)}</span>`;
+    ${r.credited ? "" : 'title="Found independently - identifier assigned to the first reporter"'}>${esc(id)}</span>`;
 };
 
 const cardHTML = (r, i = 0) => {
@@ -241,7 +241,7 @@ function viewHome() {
         <article class="step reveal" style="--i:1">
           <span class="step-n">02</span>
           <h3>One surface at a time</h3>
-          <p>Never "find all the vulnerabilities". A single attack surface, read closely —
+          <p>Never "find all the vulnerabilities". A single attack surface, read closely -
              deserialization, path handling, an authorization layer, a parser. Narrow beats
              broad every time; a wide net mostly catches noise.</p>
         </article>
@@ -805,7 +805,7 @@ function revealAll() {
   );
   document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
 
-  /* If the observer never fires — hidden document, odd webview — show everything
+  /* If the observer never fires - hidden document, odd webview - show everything
      anyway rather than leaving the page empty. */
   clearTimeout(revealFallback);
   revealFallback = setTimeout(() => {
@@ -882,7 +882,7 @@ function paint() {
     : (path.startsWith("/b/") || path.startsWith("/w/"))
         ? (POSTS_SORTED().find((x) => x.slug === path.slice(3))?.title || "Blogs")
     : "";
-  document.title = label ? `${label} — ${I.name}` : `${I.name} — ${I.role}`;
+  document.title = label ? `${label} - ${I.name}` : `${I.name} - ${I.role}`;
 
   /* move focus to the new view so keyboard and screen-reader users are not
      left at the top of a page that silently changed under them */

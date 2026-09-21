@@ -1,15 +1,15 @@
 /* ---------------------------------------------------------------------------
-   Audit corpus — codebases read during ongoing research.
+   Audit corpus - codebases read during ongoing research.
 
    DELIBERATELY CONTAINS NO FINDINGS. Several of these carry live, unresolved
    reports. Nothing here names a bug, a file, a function, a subsystem slice or
-   a technique. Project, language, and what the codebase *is* — nothing more.
+   a technique. Project, language, and what the codebase *is* - nothing more.
    Do not add findings to this file.
 --------------------------------------------------------------------------- */
 
 const AUDITS = {
   note:
-    "Codebases under active review. Findings are withheld while disclosure is in progress — " +
+    "Codebases under active review. Findings are withheld while disclosure is in progress - " +
     "what follows is only where the reading happened.",
 
   /* Counts only. No project attribution, no classes, no detail. */

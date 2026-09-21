@@ -1,5 +1,5 @@
 /* ===========================================================================
-   Background — a live hex view with a scanning reticle.
+   Background - a live hex view with a scanning reticle.
 
    Not decoration borrowed from a sci-fi film: this is the thing the work
    actually looks like. An address gutter, sixteen bytes a row, memory that

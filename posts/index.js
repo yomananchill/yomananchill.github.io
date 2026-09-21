@@ -5,7 +5,7 @@
      1. add a file at  posts/<slug>.md
      2. add an entry below, newest first
 
-   That is the whole process. No build step, no install, nothing to run — edit
+   That is the whole process. No build step, no install, nothing to run - edit
    both files straight in the GitHub web editor and commit. The deploy picks it
    up automatically.
 

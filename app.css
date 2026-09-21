@@ -1,5 +1,5 @@
 /* ===========================================================================
-   Manan Patel — disclosure record
+   Manan Patel - disclosure record
    Spacing is an 8px scale. Do not hand-pick margins; use the scale.
    =========================================================================== */
 
@@ -7,10 +7,10 @@
   --s1:4px;  --s2:8px;  --s3:12px; --s4:16px; --s5:24px;
   --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:144px;
 
-  /* TYPE RULE — two tiers, no exceptions.
+  /* TYPE RULE - two tiers, no exceptions.
      --display (serif): headings, and display-tier lead text only (hero lede,
        page lede, article deck, project names, footer name). Never body copy.
-     --ui (mono): everything else — all body paragraphs, labels, meta, data,
+     --ui (mono): everything else - all body paragraphs, labels, meta, data,
        code. It is the body default, so body copy needs no declaration. */
   --display:"Newsreader",Georgia,serif;
   --ui:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -67,7 +67,7 @@
 
 *,*::before,*::after{box-sizing:border-box}
 /* Author `display` beats the UA stylesheet's [hidden] rule, and the touch block
-   sets display:inline-flex on .nav a — which leaked the hidden Writing link on
+   sets display:inline-flex on .nav a - which leaked the hidden Writing link on
    phones. Keep this above everything that sets display. */
 [hidden]{display:none!important}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -182,7 +182,7 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
   color:var(--fg-2);max-width:56ch;margin-bottom:var(--s7)}
 .more{margin-top:var(--s6)}
 
-/* staggered reveal — hidden state is opt-in, set by JS, so a script failure
+/* staggered reveal - hidden state is opt-in, set by JS, so a script failure
    leaves the content visible rather than blank */
 html.anim .reveal{opacity:0;transform:translateY(16px)}
 html.anim .reveal.in{

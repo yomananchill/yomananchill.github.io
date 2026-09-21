@@ -15,7 +15,7 @@ const DATA = {
     twitter: "0xManan",
     linkedin: "manan-patel-4330101b4",
     summary:
-      "I work the layer under the application: browser engines, packet dissectors, compression codecs, shells — and whatever else the AI boom turned out to be built on. It arrives with everything else and gets read by nobody. What's fixed is published. What isn't, isn't.",
+      "I work the layer under the application: browser engines, packet dissectors, compression codecs, shells - and whatever else the AI boom turned out to be built on. It arrives with everything else and gets read by nobody. What's fixed is published. What isn't, isn't.",
     signature: "M. Patel",
     tagline: "I'm weird, I hack.",
     payline: "Fintech security and compliance in Bengaluru pays for it.",
@@ -29,7 +29,7 @@ const DATA = {
     { n: "04", label: "years offensive" },
   ],
 
-  /* Issuers verified 2026-09-21. PT1 is TryHackMe's Junior Penetration Tester —
+  /* Issuers verified 2026-09-21. PT1 is TryHackMe's Junior Penetration Tester -
      not "Level 1", which is what I had. Check the rest against your certificates. */
   clearances: [
     { id: "CRTO", full: "Certified Red Team Operator", by: "Zero-Point Security", group: "Offensive" },
@@ -56,9 +56,9 @@ const DATA = {
   education: [
     {
       school: "Parul University",
-      cred: "B.Tech, Computer Science — Cybersecurity",
+      cred: "B.Tech, Computer Science - Cybersecurity",
       meta: "8.06 / 10 CGPA",
-      when: "2020 — 2024",
+      when: "2020 - 2024",
     },
   ],
 
@@ -130,14 +130,14 @@ const DATA = {
     {
       org: "Khatabook",
       place: "Bengaluru, India",
-      span: "Aug 2025 — Present",
+      span: "Aug 2025 - Present",
       roles: [
         {
           title: "Security Researcher & Compliance",
-          span: "Aug 2025 — Present",
+          span: "Aug 2025 - Present",
           points: [
             "Lead information security and compliance programs across multiple legal entities, covering international security standards and financial-sector regulation.",
-            "Own end-to-end security operations — vulnerability management, incident response, detection engineering, and cloud security across AWS.",
+            "Own end-to-end security operations - vulnerability management, incident response, detection engineering, and cloud security across AWS.",
             "Run offensive research and red team simulation to surface risk before anyone else finds it.",
             "Drive audit readiness end to end: evidence coordination, auditor engagement, and continuous improvement of control effectiveness.",
           ],
@@ -147,13 +147,13 @@ const DATA = {
     {
       org: "Independent",
       place: "Remote",
-      span: "Jul 2021 — Present",
+      span: "Jul 2021 - Present",
       roles: [
         {
           title: "Security Researcher",
-          span: "Jul 2021 — Present",
+          span: "Jul 2021 - Present",
           points: [
-            "Research AI/ML frameworks, LLM applications, and machine learning infrastructure — source review, threat modeling, exploit development.",
+            "Research AI/ML frameworks, LLM applications, and machine learning infrastructure - source review, threat modeling, exploit development.",
             "Discovered CVEs in widely deployed open-source AI projects including LlamaIndex, Keras, MLflow, and LoLLMs.",
             "Work with maintainers to validate findings, coordinate disclosure, and verify fixes before they ship.",
           ],
@@ -162,12 +162,12 @@ const DATA = {
     },
     {
       org: "Security Lit / Capture The Bug",
-      place: "New Zealand — Remote",
-      span: "Jul 2024 — Jul 2025",
+      place: "New Zealand - Remote",
+      span: "Jul 2024 - Jul 2025",
       roles: [
         {
           title: "Penetration Tester",
-          span: "Jul 2024 — Jul 2025",
+          span: "Jul 2024 - Jul 2025",
           points: [
             "Led client engagements end to end, delivering assessments and the findings that actually changed their posture.",
             "Tested web applications, mobile applications, APIs, and networks.",
@@ -179,11 +179,11 @@ const DATA = {
     {
       org: "Infosec Writeups",
       place: "Remote",
-      span: "Jan 2023 — Jan 2024",
+      span: "Jan 2023 - Jan 2024",
       roles: [
         {
           title: "Ambassador",
-          span: "Jan 2023 — Jan 2024",
+          span: "Jan 2023 - Jan 2024",
           points: [
             "Curated and edited a weekly infosec newsletter reaching 1M+ monthly views.",
             "Managed ambassadors and sourced original community content.",
@@ -256,10 +256,10 @@ const DATA = {
       body: "Won outright against a hundred and twenty teams over a single weekend build.",
     },
     {
-      title: "IWCON CTF",
+      title: "Infosec Writeups CTF",
       rank: "Runners up",
       when: "2023",
-      body: "Second place at the Infosec Writeups conference, against a field of around a thousand.",
+      body: "Second place at the annual conference CTF, against a field of around a thousand.",
     },
   ],
 };

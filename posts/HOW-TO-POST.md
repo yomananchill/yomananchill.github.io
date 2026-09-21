@@ -1,6 +1,6 @@
 # How to publish a blog post
 
-Two files. Both editable in the GitHub web editor — no tooling, no build.
+Two files. Both editable in the GitHub web editor - no tooling, no build.
 
 ## 1. Write the post
 
@@ -21,7 +21,7 @@ A paragraph. **Bold**, *italic*, `inline code`, [a link](https://example.com).
 ---
 ```
 
-Supported: `#`–`####` headings, paragraphs, `**bold**`, `*italic*`, `` `code` ``,
+Supported: `#`-`####` headings, paragraphs, `**bold**`, `*italic*`, `` `code` ``,
 fenced code blocks, links, bullet and numbered lists, blockquotes, and `---` rules.
 
 ## 2. Add it to the index
@@ -44,5 +44,5 @@ Commit. The post appears at `/#/b/your-slug` and in the Blogs list.
 
 - The Blogs page is always linked; with no posts it shows an empty state.
 - Posts are fetched at read time, so a missing `.md` shows an error on that
-  post's page only — the rest of the site is unaffected.
+  post's page only - the rest of the site is unaffected.
 - Nothing here is coupled to the disclosure record. Adding posts cannot break it.
