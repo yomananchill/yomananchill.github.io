@@ -135,8 +135,7 @@ document.querySelector(".foot").innerHTML = `
     <div class="foot-col">
       <h4>Policy</h4>
       <p class="foot-note">
-        Findings are published only after a fix has shipped. Anything still in
-        disclosure is listed without root cause.
+        Findings are published only after a fix has shipped publicly.
       </p>
     </div>
   </div>`;
@@ -372,8 +371,8 @@ function viewDisclosures() {
     <div class="crumbs"><a href="#/">Index</a> <span>/</span> <span>Disclosures</span></div>
     <h1 class="page-h1">The disclosure record</h1>
     <p class="page-lede">
-      ${REPORTS.length} accepted reports across ${repos.length} projects. Writeups go up
-      once a fix ships; everything else is listed without root cause.
+      ${REPORTS.length} accepted reports across ${repos.length} projects. Writeups
+      go up once a fix ships.
     </p>
   </div>
 

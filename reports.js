@@ -258,36 +258,4 @@ const REPORTS = [
       "Disclosure of sensitive host files through a routine ingestion path, useful directly and as a step toward privilege escalation.",
     fix: "image_path is canonicalized and validated against an allowed directory, rejecting absolute paths and traversal.",
   },
-
-  /* ──────────────── reported, still unpatched upstream ──────────────── */
-  {
-    slug: "transformers-nougat-redos",
-    depth: "index", credited: false,
-    title: "Regular Expression Denial Of Service In Nougat Tokenization",
-    short: "ReDoS In Transformers",
-    repo: "huggingface/transformers", cls: "ReDoS", sev: "medium", cvss: "5.3",
-    date: "2026-02-23", state: "Unpatched", cve: "",
-    url: "https://github.com/huggingface/transformers",
-    tags: ["AI/ML", "Tokenization"],
-  },
-  {
-    slug: "llama-index-unstructured-dos",
-    depth: "index", credited: false,
-    title: "Denial Of Service Via The UnstructuredReader Split Document Path",
-    short: "Unbounded Ingestion In UnstructuredReader",
-    repo: "run-llama/llama_index", cls: "Denial of Service", sev: "medium", cvss: "5.3",
-    date: "2025-06-20", state: "Unpatched", cve: "",
-    url: "https://github.com/run-llama/llama_index",
-    tags: ["AI/ML", "Data Ingestion"],
-  },
-  {
-    slug: "llama-index-txtai-pickle",
-    depth: "index", credited: false,
-    title: "Unsafe Pickle Deserialization In TxtaiVectorStore",
-    short: "Pickle Fallback In A Vector Store",
-    repo: "run-llama/llama_index", cls: "Deserialization", sev: "high", cvss: "8.3",
-    date: "2025-04-08", state: "Unpatched", cve: "",
-    url: "https://github.com/run-llama/llama_index",
-    tags: ["AI/ML", "Vector Stores"],
-  },
 ];
