@@ -197,8 +197,8 @@ const DATA = {
     {
       name: "Kryptonite",
       kind: "Tool",
-      url: "https://github.com/0xManan/Kryptonite",
-      linkLabel: "github.com/0xManan/Kryptonite",
+      url: "https://github.com/yomananchill/Kryptonite",
+      linkLabel: "github.com/yomananchill/Kryptonite",
       body:
         "RAM acquisition tool for forensic analysis on Windows and Linux, written in PowerShell and Python. Built for incident responders who need a memory image without a lengthy setup.",
       tags: ["DFIR", "PowerShell", "Python"],
@@ -206,8 +206,8 @@ const DATA = {
     {
       name: "SecureByte",
       kind: "Tool",
-      url: "https://github.com/0xManan/SecureByte",
-      linkLabel: "github.com/0xManan/SecureByte",
+      url: "https://github.com/yomananchill/SecureByte",
+      linkLabel: "github.com/yomananchill/SecureByte",
       body:
         "Python tool built alongside my published cryptography research, using layered AES + RSA encryption. Research artifact, published openly.",
       tags: ["Cryptography", "Python"],
