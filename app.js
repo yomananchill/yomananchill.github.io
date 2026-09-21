@@ -2,6 +2,15 @@
    Router + views. No framework, no build step.
    =========================================================================== */
 
+/* Evict the previous site's service worker. It was a PWA and serves cache-first,
+   so without this a returning visitor keeps seeing the old Jekyll build. */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations?.().then((rs) => {
+    rs.forEach((r) => r.unregister());
+  }).catch(() => {});
+  caches?.keys?.().then((ks) => ks.forEach((k) => caches.delete(k))).catch(() => {});
+}
+
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
