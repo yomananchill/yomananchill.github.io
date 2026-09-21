@@ -106,7 +106,7 @@ document.querySelectorAll(".nav a").forEach((a) =>
 
 const SOCIAL = [
   ["Email", `mailto:${I.email}`, I.email],
-  ["GitHub", `https://github.com/${I.github}`, `@${I.github}`],
+  ["GitHub", `https://github.com/${I.github}`, `github.com/${I.github}`],
   ["Twitter", `https://x.com/${I.twitter}`, `@${I.twitter}`],
   ["LinkedIn", `https://linkedin.com/in/${I.linkedin}`, "in/manan-patel"],
 ];
@@ -213,7 +213,7 @@ function viewHome() {
       <div class="hero-meta reveal" style="--i:4">
         <a class="pill" href="#/disclosures">Disclosure record <i>&rarr;</i></a>
         <a class="pill" href="mailto:${esc(I.email)}">${esc(I.email)}</a>
-        <a class="pill" href="https://github.com/${esc(I.github)}" rel="me noopener">@${esc(I.github)}</a>
+        <a class="pill" href="https://github.com/${esc(I.github)}" rel="me noopener">github.com/${esc(I.github)}</a>
       </div>
 
       <div class="namerows reveal" style="--i:5">
