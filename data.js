@@ -15,7 +15,7 @@ const DATA = {
     twitter: "0xManan",
     linkedin: "manan-patel-4330101b4",
     summary:
-      "I work the layer under the application: browser engines, packet dissectors, compression codecs, shells - and whatever else the AI boom turned out to be built on. It arrives with everything else and gets read by nobody. What's fixed is published. What isn't, isn't.",
+      "School lost me early. Then I found hacking, and for the first time something actually stuck. I learned by pulling real software apart to see where it broke - and that's still what I do, mostly on AI frameworks and the open-source infrastructure everything else runs on.",
     signature: "M. Patel",
     tagline: "I'm weird, I hack.",
     payline: "Fintech security and compliance in Bengaluru pays for it.",

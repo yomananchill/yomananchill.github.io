@@ -12,8 +12,8 @@
        page lede, article deck, project names, footer name). Never body copy.
      --ui (mono): everything else - all body paragraphs, labels, meta, data,
        code. It is the body default, so body copy needs no declaration. */
-  --display:"Newsreader",Georgia,serif;
-  --ui:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --display:"Newsreader","Noto Serif Devanagari",Georgia,serif;
+  --ui:"JetBrains Mono","Noto Serif Devanagari",ui-monospace,SFMono-Regular,Menlo,monospace;
 
   /* Light tone sampled from hacktron.ai: --background oklch(97.35% .0261 90.1)
      and --foreground oklch(17.07% .0143 2.14). Tiers are that foreground blended
@@ -114,10 +114,14 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
 /* ─────────────────────────── top bar ─────────────────────────── */
 .topbar{
   position:sticky;top:0;
-  display:flex;align-items:center;gap:var(--s5);
-  padding:var(--s4) var(--s6);
   background:color-mix(in srgb,var(--bg) 82%,transparent);
   backdrop-filter:blur(16px) saturate(1.4);
+}
+/* Inner rail matches .shell so the bar's contents line up with page content. */
+.topbar-in{
+  display:flex;align-items:center;gap:var(--s5);
+  max-width:var(--shell);margin:0 auto;
+  padding:var(--s4) var(--s6);
   transition:padding var(--mid) var(--ease);
 }
 .topbar::after{
@@ -125,7 +129,7 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
   background:linear-gradient(90deg,transparent,var(--line) 8%,var(--line) 92%,transparent);
   opacity:0;transition:opacity var(--mid) var(--ease);
 }
-.topbar.condensed{padding:var(--s2) var(--s6)}
+.topbar.condensed .topbar-in{padding:var(--s2) var(--s6)}
 .topbar.condensed::after{opacity:1}
 
 .brand{display:flex;align-items:baseline;gap:0;color:inherit;
@@ -170,6 +174,16 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
   background:linear-gradient(90deg,transparent,var(--line) 6%,var(--line) 94%,transparent)}
 .section.last{padding-bottom:var(--s6)}
 
+/* Name mark: a quiet identity line at the very top of the hero. One optical
+   size across all three parts so it reads as a single line, not three. */
+.namemark{display:flex;align-items:baseline;flex-wrap:wrap;gap:var(--s3);
+  margin-bottom:var(--s4);font-family:var(--ui);font-size:clamp(13px,1.4vw,15px)}
+.namemark .dev{font-family:var(--display);font-size:1.08em;
+  color:var(--accent);line-height:1}
+.namemark-rom{font-size:.82em;letter-spacing:.22em;text-transform:uppercase;color:var(--fg-2)}
+.namemark-sep{color:var(--line-2);font-size:.82em}
+.namemark-gloss{font-family:var(--display);font-style:italic;color:var(--fg-3)}
+
 .sec-label{display:flex;align-items:center;gap:var(--s4);
   font-family:var(--ui);font-weight:400;
   font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--fg-3);
@@ -208,6 +222,9 @@ html.anim .reveal.in{
 .hero-pay{font-family:var(--display);font-size:clamp(15px,1.7vw,19px);color:var(--fg-3);
   max-width:60ch;margin-bottom:var(--s6);text-wrap:pretty}
 .hero-meta{display:flex;flex-wrap:wrap;gap:var(--s3)}
+/* Devanagari glyphs render via the Noto fallback in --display/--ui; this only
+   nudges size, since Noto's x-height runs a touch small next to Newsreader. */
+.dev{font-size:1.04em}
 
 .pill{display:inline-flex;align-items:center;gap:var(--s2);
   font-size:11px;letter-spacing:.1em;
@@ -297,10 +314,12 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 .search kbd{border:1px solid var(--line-2);padding:0 5px;font-size:10px;color:var(--fg-3);
   border-radius:2px}
 
-.sort{margin-left:auto;display:flex;align-items:center;gap:var(--s2);font-size:10.5px;
+.field{display:flex;align-items:center;gap:var(--s2);font-size:10.5px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--fg-3)}
-.sort select{font-family:var(--ui);font-size:11px;background:var(--bg);color:var(--fg);
+.field select{font-family:var(--ui);font-size:11px;background:var(--bg);color:var(--fg);
   border:1px solid var(--line-2);padding:var(--s1) var(--s2);cursor:pointer}
+.field select:focus-visible{outline:none;border-color:var(--accent)}
+.sort{margin-left:auto}
 
 .chiprow{display:grid;grid-template-columns:76px minmax(0,1fr);gap:var(--s3);
   align-items:start;margin-top:var(--s3)}
@@ -530,7 +549,7 @@ a.box:hover{border-color:var(--accent);background:var(--bg-2);transform:translat
   .nav a{min-height:44px;display:inline-flex;align-items:center}
   .theme{width:40px;height:40px}
   .foot-col a{min-height:44px;align-items:center}
-  .sort select{min-height:40px;padding:var(--s2)}
+  .field select{min-height:40px;padding:var(--s2)}
   .search{min-height:44px}
   .clear,.linkish{min-height:44px;display:inline-flex;align-items:center;font-size:11px}
   .toc a{min-height:40px;display:inline-flex;align-items:center}
@@ -545,15 +564,16 @@ a.box:hover{border-color:var(--accent);background:var(--bg-2);transform:translat
 
 @media (max-width:760px){
   .shell,.foot-in{padding:0 var(--s4)}
-  .topbar{padding:var(--s3) var(--s4);gap:var(--s3);flex-wrap:wrap}
-  .topbar.condensed{padding:var(--s2) var(--s4)}
+  .topbar-in{padding:var(--s3) var(--s4);gap:var(--s3);flex-wrap:wrap}
+  .topbar.condensed .topbar-in{padding:var(--s2) var(--s4)}
   .nav{margin-left:auto;gap:0}
   .nav a{padding:var(--s2)}
   .section{padding:var(--s8) 0}
   .hero{padding:var(--s8) 0 var(--s6)}
-  .sort{margin-left:0;width:100%}
-  .chiprow{grid-template-columns:1fr;gap:var(--s2)}
-  .chip-label{padding-top:0}
+  .filter-row{flex-direction:column;align-items:stretch}
+  .field{justify-content:space-between}
+  .field select{flex:1;margin-left:var(--s3)}
+  .sort{margin-left:0}
   .namerow{grid-template-columns:1fr;gap:var(--s2)}
   .prevnext{grid-template-columns:1fr}
   .prevnext .nx{text-align:left}

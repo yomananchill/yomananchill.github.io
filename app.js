@@ -205,17 +205,18 @@ function viewHome() {
   return `
   <section class="hero">
     <div class="shell">
-      <p class="hero-kicker reveal" style="--i:0">${esc(I.role)} &middot; ${esc(I.location)}</p>
-      <h1 class="reveal" style="--i:1">I read other people's code <em>until it breaks</em>.</h1>
-      <p class="hero-lede reveal" style="--i:2">${esc(I.summary)}</p>
-      <p class="hero-pay reveal" style="--i:3">${esc(I.payline)}</p>
-      <div class="hero-meta reveal" style="--i:4">
+      <p class="namemark reveal" style="--i:0"><span class="dev">मनन</span><span class="namemark-sep" aria-hidden="true">&bull;</span><span class="namemark-rom">manan</span><span class="namemark-sep" aria-hidden="true">&bull;</span><span class="namemark-gloss">the one who thinks it through, then thinks again.</span></p>
+      <p class="hero-kicker reveal" style="--i:1">${esc(I.role)} &middot; ${esc(I.location)}</p>
+      <h1 class="reveal" style="--i:2">I read other people's code <em>until it breaks</em>.</h1>
+      <p class="hero-lede reveal" style="--i:3">${esc(I.summary)}</p>
+      <p class="hero-pay reveal" style="--i:4">${esc(I.payline)}</p>
+      <div class="hero-meta reveal" style="--i:5">
         <a class="pill" href="#/disclosures">Disclosure record <i>&rarr;</i></a>
         <a class="pill" href="mailto:${esc(I.email)}">${esc(I.email)}</a>
         <a class="pill" href="https://github.com/${esc(I.github)}" rel="me noopener">@${esc(I.github)}</a>
       </div>
 
-      <div class="namerows reveal" style="--i:5">
+      <div class="namerows reveal" style="--i:6">
         <div class="namerow">
           <span class="nr-label">Working through<br>and disclosed findings</span>
           <p class="nr-list">${projects
@@ -233,23 +234,23 @@ function viewHome() {
         <article class="step reveal" style="--i:0">
           <span class="step-n">01</span>
           <h3>Threat model first</h3>
-          <p>Prior advisories for the project, the bug classes that keep recurring, the trust
-             boundaries, and a short list of invariants that ought to hold. One page, kept
-             editable. That page is the filter everything else runs through.</p>
+          <p>Before I read any code I write one page: the project's past advisories, the bug
+             classes that keep coming back, where the trust boundaries sit, and the handful of
+             things that should always hold true. Everything after that gets checked against it.</p>
         </article>
         <article class="step reveal" style="--i:1">
           <span class="step-n">02</span>
           <h3>One surface at a time</h3>
-          <p>Never "find all the vulnerabilities". A single attack surface, read closely -
-             deserialization, path handling, an authorization layer, a parser. Narrow beats
-             broad every time; a wide net mostly catches noise.</p>
+          <p>I don't try to find everything. I pick one surface - a parser, path handling, an
+             auth layer, how something gets deserialized - and read it properly. Going narrow
+             turns up real bugs; going wide mostly turns up noise.</p>
         </article>
         <article class="step reveal" style="--i:2">
           <span class="step-n">03</span>
           <h3>Prove it or drop it</h3>
-          <p>Exact call chain, a reproduction, a patch that actually closes it. An unverified
-             finding that looks plausible is still noise, and maintainers get enough of that
-             already.</p>
+          <p>A finding isn't done until I have the exact call chain, a reproduction that works,
+             and a patch that closes it. If I can't show it, I don't send it - maintainers get
+             enough maybes already.</p>
         </article>
       </div>
     </div>
@@ -357,14 +358,15 @@ function viewHome() {
 
 /* ------------------------------------------------------------- disclosures */
 
-/* One filter at a time. Combining a class with a project almost always produced
-   an empty list, which reads as a broken page rather than as a filter. */
-const FILTERS = { q: "", kind: "", value: "", sort: "date" };
+/* Labelled dropdowns that combine: pick a class, a project, an attribution, or
+   any mix, and search on top. Empty results just say so and offer a reset. */
+const FILTERS = { q: "", cls: "", repo: "", cred: "", sort: "date" };
 
 function viewDisclosures() {
   const classes = [...new Set(REPORTS.map((r) => r.cls))].sort();
   const repos = [...new Set(REPORTS.map((r) => r.repo))].sort();
-  const on = (k, v) => String(FILTERS.kind === k && FILTERS.value === v);
+  const opt = (v, label, sel) =>
+    `<option value="${esc(v)}"${sel === v ? " selected" : ""}>${esc(label)}</option>`;
 
   return `
   <div class="shell">
@@ -383,30 +385,39 @@ function viewDisclosures() {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
             <circle cx="11" cy="11" r="7"/><path d="M20 20l-4.3-4.3"/>
           </svg>
-          <input type="search" id="q" placeholder="Search titles, classes, projects…" value="${esc(FILTERS.q)}">
+          <input type="search" id="q" placeholder="Search the record…" value="${esc(FILTERS.q)}">
           <kbd>/</kbd>
         </label>
-        <div class="sort">
+        <label class="field">
+          <span>Class</span>
+          <select id="f-cls">
+            ${opt("", "All classes", FILTERS.cls)}
+            ${classes.map((c) => opt(c, c, FILTERS.cls)).join("")}
+          </select>
+        </label>
+        <label class="field">
+          <span>Project</span>
+          <select id="f-repo">
+            ${opt("", "All projects", FILTERS.repo)}
+            ${repos.map((c) => opt(c, pretty(c), FILTERS.repo)).join("")}
+          </select>
+        </label>
+        <label class="field">
+          <span>Attribution</span>
+          <select id="f-cred">
+            ${opt("", "All reports", FILTERS.cred)}
+            ${opt("credited", "Credited CVEs", FILTERS.cred)}
+            ${opt("independent", "Independent", FILTERS.cred)}
+          </select>
+        </label>
+        <label class="field sort">
           <span>Sort</span>
           <select id="sort">
             <option value="date">Newest</option>
             <option value="sev">Severity</option>
             <option value="repo">Project</option>
           </select>
-        </div>
-      </div>
-
-      <div class="chiprow">
-        <span class="chip-label">Class</span>
-        <div class="chips">
-          ${classes.map((c) => `<button class="chip" data-kind="cls" data-value="${esc(c)}" aria-pressed="${on("cls", c)}">${esc(c)}</button>`).join("")}
-        </div>
-      </div>
-      <div class="chiprow">
-        <span class="chip-label">Project</span>
-        <div class="chips">
-          ${repos.map((c) => `<button class="chip" data-kind="repo" data-value="${esc(c)}" aria-pressed="${on("repo", c)}">${esc(pretty(c))}</button>`).join("")}
-        </div>
+        </label>
       </div>
     </div>
   </div>
@@ -427,10 +438,12 @@ function applyFilters() {
   const q = FILTERS.q.toLowerCase();
 
   const rows = REPORTS.filter((r) => {
-    if (FILTERS.kind === "cls" && r.cls !== FILTERS.value) return false;
-    if (FILTERS.kind === "repo" && r.repo !== FILTERS.value) return false;
+    if (FILTERS.cls && r.cls !== FILTERS.cls) return false;
+    if (FILTERS.repo && r.repo !== FILTERS.repo) return false;
+    if (FILTERS.cred === "credited" && !r.credited) return false;
+    if (FILTERS.cred === "independent" && r.credited) return false;
     if (!q) return true;
-    return [r.title, r.short, r.cls, r.repo, pretty(r.repo), r.cve, r.state]
+    return [r.title, r.short, r.cls, r.repo, pretty(r.repo), r.cve, r.ident, r.state]
       .join(" ").toLowerCase().includes(q);
   });
 
@@ -449,28 +462,28 @@ function applyFilters() {
 
   document.querySelector("#count").textContent =
     `${rows.length} of ${REPORTS.length} report${rows.length === 1 ? "" : "s"}`;
-  document.querySelector("#clear").hidden = !(FILTERS.kind || FILTERS.q);
+  document.querySelector("#clear").hidden =
+    !(FILTERS.cls || FILTERS.repo || FILTERS.cred || FILTERS.q);
 
   const p = new URLSearchParams();
   if (FILTERS.q) p.set("q", FILTERS.q);
-  if (FILTERS.kind) p.set(FILTERS.kind, FILTERS.value);
+  if (FILTERS.cls) p.set("cls", FILTERS.cls);
+  if (FILTERS.repo) p.set("repo", FILTERS.repo);
+  if (FILTERS.cred) p.set("cred", FILTERS.cred);
   if (FILTERS.sort !== "date") p.set("sort", FILTERS.sort);
   const qs = p.toString();
   history.replaceState(null, "", "#/disclosures" + (qs ? "?" + qs : ""));
   revealAll();
 }
 
-function paintChips() {
-  document.querySelectorAll(".chip[data-kind]").forEach((b) =>
-    b.setAttribute("aria-pressed", String(b.dataset.kind === FILTERS.kind && b.dataset.value === FILTERS.value))
-  );
-}
-
 function clearFilter() {
-  FILTERS.kind = FILTERS.value = FILTERS.q = "";
+  FILTERS.cls = FILTERS.repo = FILTERS.cred = FILTERS.q = "";
   const q = document.querySelector("#q");
   if (q) q.value = "";
-  paintChips();
+  ["#f-cls", "#f-repo", "#f-cred"].forEach((s) => {
+    const el = document.querySelector(s);
+    if (el) el.value = "";
+  });
   applyFilters();
 }
 
@@ -478,19 +491,16 @@ function wireDisclosures() {
   const input = document.querySelector("#q");
   input.addEventListener("input", (e) => { FILTERS.q = e.target.value; applyFilters(); });
 
-  const sort = document.querySelector("#sort");
-  sort.value = FILTERS.sort;
-  sort.addEventListener("change", (e) => { FILTERS.sort = e.target.value; applyFilters(); });
-
-  document.querySelectorAll(".chip[data-kind]").forEach((b) => {
-    b.addEventListener("click", () => {
-      const same = FILTERS.kind === b.dataset.kind && FILTERS.value === b.dataset.value;
-      FILTERS.kind = same ? "" : b.dataset.kind;
-      FILTERS.value = same ? "" : b.dataset.value;
-      paintChips();
-      applyFilters();
-    });
-  });
+  const bind = (sel, key) => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.value = FILTERS[key];
+    el.addEventListener("change", (e) => { FILTERS[key] = e.target.value; applyFilters(); });
+  };
+  bind("#f-cls", "cls");
+  bind("#f-repo", "repo");
+  bind("#f-cred", "cred");
+  bind("#sort", "sort");
 
   document.querySelector("#clear").addEventListener("click", clearFilter);
   applyFilters();
@@ -853,8 +863,9 @@ function paint() {
     wireToc();
   } else if (path === "/disclosures") {
     FILTERS.q = params.get("q") || "";
-    FILTERS.kind = params.get("cls") ? "cls" : params.get("repo") ? "repo" : "";
-    FILTERS.value = params.get("cls") || params.get("repo") || "";
+    FILTERS.cls = params.get("cls") || "";
+    FILTERS.repo = params.get("repo") || "";
+    FILTERS.cred = params.get("cred") || "";
     FILTERS.sort = params.get("sort") || "date";
     main.innerHTML = viewDisclosures();
     wireDisclosures();

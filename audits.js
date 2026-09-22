@@ -34,7 +34,6 @@ const AUDITS = {
     { name: "oFono",       langs: ["C"],                                  area: "Telephony",           note: "Modem and cellular stack" },
     { name: "PDFCreator",  langs: ["C#", "JavaScript"],                   area: "PDF tooling",         note: "Document generation and conversion" },
     { name: "Vercel AI",   langs: ["TypeScript", "JavaScript"],           area: "AI SDK",              note: "Model routing and streaming surface" },
-    { name: "Elysia",      langs: ["TypeScript"],                         area: "Web framework",       note: "HTTP routing and request handling" },
     { name: "Apple",       langs: ["Objective-C", "Python"],              area: "Platform internals",  note: "macOS system frameworks" },
   ],
 };
