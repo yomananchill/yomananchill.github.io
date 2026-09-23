@@ -985,7 +985,7 @@ render();
     };
     window.nmap = () => (line("Starting scan..."), line("PORT    STATE  SERVICE"), line("443/tcp open   https"), line("host is clean.", A), ret("try harder."));
     window.exploit = () => (line("no live targets here.", A), ret("the ones that ARE fixed are on /disclosures."));
-    window.flag = () => (line("you have a shell. use it.", A), line('ls()  ->  cd(".secrets")  ->  cat("flag.txt")'), ret(""));
+    window.flag = () => (line("flags don't announce themselves.", A), line("you already ran ls(). one of those wasn't meant for you."), ret(""));
     window.matrix = () => (rain(), ret("it's raining. reload to make it stop."));
 
     /* 3. Konami -> root mode. Wordmark flips to a red root shell, the page
@@ -1071,7 +1071,7 @@ render();
         typed = (typed + key).slice(-6);
         if (typed.endsWith("sudo")) toast("this isn't your shell.");
         else if (typed.endsWith("root")) toast("a hacker like you knows the konami code. use it.");
-        else if (typed.endsWith("flag")) toast('open the console: cd(".secrets") then cat("flag.txt")');
+        else if (typed.endsWith("flag")) toast("flags don't announce themselves. open the console, run ls().");
       }
     });
 
