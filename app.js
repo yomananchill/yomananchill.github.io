@@ -938,7 +938,7 @@ render();
       " |__/                                        ",
     ].join("\n"), A);
     line(`${I.handle}@${I.alias.toLowerCase()}:~$ whoami`, A);
-    line("curious, aren't you. type help() - or press ~ on the page for root.");
+    line("curious, aren't you. type help() and see what's lying around.");
 
     /* 2. Callable console commands. Real hackers try them. */
     const ret = (v) => v;
@@ -946,7 +946,7 @@ render();
       line("available:", A),
       line("  whoami()   ls()   cd(dir)   cat(file)   sudo()   nmap()"),
       line("  exploit()   flag()   matrix()"),
-      line("  and press ~ on the page for root mode (konami code works too)."),
+      line("  the konami code suits a hacker like you - try it on the page."),
       ret("try one. some of them lead somewhere.")
     );
     window.whoami = () => (
@@ -1069,8 +1069,8 @@ render();
 
       if (key.length === 1) {
         typed = (typed + key).slice(-6);
-        if (typed.endsWith("sudo")) toast("this isn't your shell. hit ~ for root.");
-        else if (typed.endsWith("root")) toast("hit ~ for a root shell. (or the konami code, if you're old-school.)");
+        if (typed.endsWith("sudo")) toast("this isn't your shell.");
+        else if (typed.endsWith("root")) toast("a hacker like you knows the konami code. use it.");
         else if (typed.endsWith("flag")) toast("check the console, the network tab, or /.well-known/.");
       }
     });
