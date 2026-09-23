@@ -945,7 +945,7 @@ render();
     window.help = () => (
       line("available:", A),
       line('  whoami()   ls()   cd("dir")   cat("file")   sudo()   nmap()'),
-      line("  exploit()   flag()   matrix()"),
+      line("  exploit()   security()   flag()   matrix()"),
       line("  the konami code suits a hacker like you - try it on the page."),
       ret("try one. some of them lead somewhere.")
     );
@@ -985,6 +985,7 @@ render();
     };
     window.nmap = () => (line("Starting scan..."), line("PORT    STATE  SERVICE"), line("443/tcp open   https"), line("host is clean.", A), ret("try harder."));
     window.exploit = () => (line("no live targets here.", A), ret("the ones that ARE fixed are on /disclosures."));
+    window.security = () => (line("found a bug in something? that's the best kind of hello.", A), line("disclosure policy + contact: /.well-known/security.txt (RFC 9116)."), ret(""));
     window.flag = () => (line("flags don't announce themselves.", A), line("you already ran ls(). one of those wasn't meant for you."), ret(""));
     window.matrix = () => (rain(), ret("it's raining. reload to make it stop."));
 
