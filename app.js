@@ -57,12 +57,21 @@ document.querySelector(".theme").addEventListener("click", () =>
 
 /* Shell prompt wordmark, plain ASCII throughout. The caret is the header's one
    live element. Built from identity so changing the handle updates it. */
-document.querySelector(".brand").innerHTML =
+const brandEl = document.querySelector(".brand");
+brandEl.innerHTML =
   `<span class="p-user">${esc(I.handle)}</span>` +
   `<span class="p-dim">@</span>` +
   `<span class="p-host">${esc(I.alias.toLowerCase())}</span>` +
   `<span class="p-dim">:-$</span>` +
   `<span class="caret" aria-hidden="true"></span>`;
+
+/* Hover peeks a fresh random memory byte into the cursor. */
+{
+  const caret = brandEl.querySelector(".caret");
+  const byte = () =>
+    "0x" + ((Math.random() * 256) | 0).toString(16).padStart(2, "0");
+  brandEl.addEventListener("pointerenter", () => (caret.dataset.peek = byte()));
+}
 
 /* Publish the topbar's real height so sticky offsets stop being magic numbers.
    It changes when the header condenses and when the nav wraps at narrow widths. */
@@ -320,7 +329,7 @@ function viewHome() {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section last">
     <div class="shell">
       <h2 class="sec-label">Commendations</h2>
       <div class="rows">
@@ -333,24 +342,6 @@ function viewHome() {
             </article>`
           )
           .join("")}
-      </div>
-    </div>
-  </section>
-
-  <section class="section last">
-    <div class="shell">
-      <h2 class="sec-label">Education &amp; contact</h2>
-      <div class="rows">
-        ${DATA.education
-          .map(
-            (e) => `<article class="row"><h3>${esc(e.cred)}</h3>
-              <span class="meta">${esc(e.when)}</span>
-              <p>${esc(e.school)} &middot; ${esc(e.meta)}</p></article>`
-          )
-          .join("")}
-      </div>
-      <div class="hero-meta" style="margin-top:var(--s6)">
-        ${SOCIAL.map(([t, h, sub]) => `<a class="pill" href="${esc(h)}" rel="me noopener">${esc(t)} &middot; ${esc(sub)}</a>`).join("")}
       </div>
     </div>
   </section>`;
@@ -926,3 +917,136 @@ addEventListener("keydown", (e) => {
 });
 
 render();
+
+/* ===========================================================================
+   Easter eggs. None of it is load-bearing; all of it is for the people who
+   poke. Wrapped so a failure here can never take the page down.
+   =========================================================================== */
+(() => {
+  try {
+    const A = "color:#a8301f;font-family:monospace;font-size:12px";
+    const D = "color:#888;font-family:monospace;font-size:12px";
+    const line = (s, c = D) => console.log("%c" + s, c);
+
+    /* 1. A console banner for whoever opens devtools first. */
+    console.log("%c" + [
+      "                                       _ _ _ ",
+      " _  _ ___ _ __  __ _ _ _  __ _ _ _  __| | | |",
+      "| || / _ \\ '  \\/ _` | ' \\/ _` | ' \\/ _| | | |",
+      " \\_, \\___/_|_|_\\__,_|_||_\\__,_|_||_\\__|_|_|_|",
+      " |__/                                        ",
+    ].join("\n"), A);
+    line(`${I.handle}@${I.alias.toLowerCase()}:~$ whoami`, A);
+    line("curious, aren't you. type help() - or press ~ on the page for root.");
+
+    /* 2. Callable console commands. Real hackers try them. */
+    const ret = (v) => v;
+    window.help = () => (
+      line("available:", A),
+      line("  whoami()   sudo()   ls()   nmap()   exploit()   flag()   matrix()"),
+      line("  and press ~ on the page for root mode (konami code works too)."),
+      ret("try one.")
+    );
+    window.whoami = () => (
+      line("manan patel  aka 0xManan", A),
+      line("security researcher / bengaluru / reads other people's code until it breaks"),
+      ret("you. probably.")
+    );
+    window.sudo = (c) => (line("[sudo] password for guest: ********"), line("nice try.", A), ret("guest is not in the sudoers file. this incident will be reported."));
+    window.ls = () => (line("disclosures/   audits/   blogs/   .secrets/"), ret(".secrets/ is not for you (yet)."));
+    window.nmap = () => (line("Starting scan..."), line("PORT    STATE  SERVICE"), line("443/tcp open   https"), line("host is clean.", A), ret("try harder."));
+    window.exploit = () => (line("no live targets here.", A), ret("the ones that ARE fixed are on /disclosures."));
+    window.flag = () => (line("close. the flag isn't in the console.", A), ret("view-source, or the network tab, or /.well-known/ ... somewhere."));
+    window.matrix = () => (rain(), ret("it's raining. reload to make it stop."));
+
+    /* 3. Konami -> root mode. Wordmark flips to a red root shell, the page
+          tints, and the hex field goes hot. Enter it again to drop back. */
+    const KONAMI = ["arrowup","arrowup","arrowdown","arrowdown","arrowleft","arrowright","arrowleft","arrowright","b","a"];
+    let k = 0, rooted = false;
+    const brand = document.querySelector(".brand");
+
+    function toggleRoot() {
+      rooted = !rooted;
+      document.documentElement.classList.toggle("rooted", rooted);
+      if (rooted) {
+        brand.dataset.saved = brand.innerHTML;
+        brand.innerHTML =
+          `<span class="p-user" style="color:var(--accent)">root</span>` +
+          `<span class="p-dim">@</span><span class="p-host">${esc(I.alias.toLowerCase())}</span>` +
+          `<span class="p-dim">:~#</span><span class="caret" aria-hidden="true"></span>`;
+        toast("root shell acquired. you didn't get that from me.");
+        line("privilege escalated. uid=0(root). enjoy responsibly.", A);
+      } else {
+        if (brand.dataset.saved) brand.innerHTML = brand.dataset.saved;
+        toast("dropped back to guest.");
+      }
+    }
+
+    /* 4. A tiny transient toast. */
+    let toastEl;
+    function toast(msg) {
+      if (!toastEl) {
+        toastEl = document.createElement("div");
+        toastEl.className = "egg-toast";
+        document.body.appendChild(toastEl);
+      }
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toastEl.classList.remove("show"), 2600);
+    }
+
+    /* 5. Hex rain (matrix(), and once as the konami payload flourish). */
+    function rain() {
+      const cv = document.createElement("canvas");
+      cv.className = "egg-rain";
+      document.body.appendChild(cv);
+      const ctx = cv.getContext("2d");
+      let W, H, cols, drops;
+      const size = () => {
+        W = cv.width = innerWidth; H = cv.height = innerHeight;
+        cols = Math.floor(W / 14); drops = Array(cols).fill(0);
+      };
+      size();
+      const HEX = "0123456789abcdef";
+      const tick = () => {
+        ctx.fillStyle = "rgba(0,0,0,0.08)";
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "#a8301f";
+        ctx.font = "13px monospace";
+        drops.forEach((y, i) => {
+          ctx.fillText(HEX[(Math.random() * 16) | 0], i * 14, y * 14);
+          drops[i] = y * 14 > H && Math.random() > 0.975 ? 0 : y + 1;
+        });
+        raf = requestAnimationFrame(tick);
+      };
+      let raf = requestAnimationFrame(tick);
+      addEventListener("resize", size, { passive: true });
+      return () => { cancelAnimationFrame(raf); cv.remove(); };
+    }
+
+    /* 6. Key handling. Two ways in: the easy one (~, the terminal key) and the
+          konami sequence for the ones who know it. Plus type-triggers. */
+    let typed = "";
+    addEventListener("keydown", (e) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      const key = (e.key || "").toLowerCase();
+
+      if (key === "`" || key === "~") { toggleRoot(); return; }   // easy trigger
+
+      k = key === KONAMI[k] ? k + 1 : (key === KONAMI[0] ? 1 : 0);
+      if (k === KONAMI.length) { k = 0; toggleRoot(); }
+
+      if (key.length === 1) {
+        typed = (typed + key).slice(-6);
+        if (typed.endsWith("sudo")) toast("this isn't your shell. hit ~ for root.");
+        else if (typed.endsWith("root")) toast("hit ~ for a root shell. (or the konami code, if you're old-school.)");
+        else if (typed.endsWith("flag")) toast("check the console, the network tab, or /.well-known/.");
+      }
+    });
+
+    /* 7. A view-source note for whoever reads the markup. */
+    /* (A view-source note lives as a comment in index.html.) */
+  } catch (e) { /* eggs never break the page */ }
+})();

@@ -139,10 +139,13 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
 .p-user{color:var(--fg)}
 .p-host{color:var(--accent)}
 .p-dim{color:var(--fg-3)}
-.caret{display:inline-block;width:7px;height:1.05em;margin-left:5px;
-  background:var(--accent);transform:translateY(2px);
-  animation:blink 1.06s step-end infinite}
-@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+/* Steady block cursor (no blink). On hover the wordmark peeks a memory byte,
+   tying into the hex field behind it - a small nod, not a gimmick. */
+.caret{display:inline-block;height:1.05em;margin-left:6px;color:var(--accent);
+  transform:translateY(1px);font-size:.86em;letter-spacing:.04em;white-space:nowrap;
+  transition:opacity var(--fast) var(--ease)}
+.caret::before{content:"\2588"}
+.brand:hover .caret::before{content:attr(data-peek)}
 .brand:hover .p-host{color:var(--accent-2)}
 
 .nav{display:flex;gap:var(--s1);margin-left:auto}
@@ -182,7 +185,7 @@ a:hover > i,a:focus-visible > i{transform:translateX(4px)}
   color:var(--accent);line-height:1}
 .namemark-rom{font-size:.82em;letter-spacing:.22em;text-transform:uppercase;color:var(--fg-2)}
 .namemark-sep{color:var(--line-2);font-size:.82em}
-.namemark-gloss{font-family:var(--display);font-style:italic;color:var(--fg-3)}
+.namemark-gloss{font-family:var(--display);color:var(--fg-3)}
 
 .sec-label{display:flex;align-items:center;gap:var(--s4);
   font-family:var(--ui);font-weight:400;
@@ -588,3 +591,17 @@ a.box:hover{border-color:var(--accent);background:var(--bg-2);transform:translat
   .art-wrap{grid-template-columns:1fr}
   html.anim .reveal{opacity:1;transform:none}
 }
+
+/* ─────────────────────────── easter eggs ─────────────────────────── */
+.egg-toast{position:fixed;left:50%;bottom:var(--s6);transform:translate(-50%,12px);
+  font-family:var(--ui);font-size:11px;letter-spacing:.05em;color:var(--bg);
+  background:var(--accent);padding:var(--s2) var(--s4);border-radius:99px;
+  z-index:200;opacity:0;pointer-events:none;max-width:calc(100vw - var(--s6));
+  text-align:center;transition:opacity var(--mid) var(--ease),transform var(--mid) var(--out)}
+.egg-toast.show{opacity:1;transform:translate(-50%,0)}
+.egg-rain{position:fixed;inset:0;z-index:120;pointer-events:none;mix-blend-mode:screen}
+/* root mode runs hot: accent turns alarm-red everywhere, including the hex field.
+   :root.rooted needed to outrank :root[data-theme="dark"] on specificity. */
+:root.rooted{--accent:#ff3b30;--accent-2:#ff5a4f}
+:root.rooted .topbar::after{opacity:1;background:#ff3b30}
+/* discoverable trigger hint, styled as a faint shell comment next to the wordmark */

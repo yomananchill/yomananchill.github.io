@@ -211,7 +211,7 @@
     addEventListener("resize", () => { size(); if (still()) render(performance.now()); }, { passive: true });
     document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
     new MutationObserver(() => { palette(); if (still()) render(performance.now()); })
-      .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+      .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
 
     palette();
     size();

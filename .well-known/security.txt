@@ -1,0 +1,9 @@
+# If you are reading this, you are my kind of visitor.
+# Found something in this site? Tell me. Found something in someone
+# else's? That is what the disclosure record is for.
+
+Contact: mailto:notmanan.ctf@gmail.com
+Contact: https://github.com/yomananchill
+Preferred-Languages: en
+Canonical: https://yomananchill.github.io/.well-known/security.txt
+Expires: 2027-09-23T00:00:00.000Z
