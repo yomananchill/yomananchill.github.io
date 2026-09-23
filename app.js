@@ -927,6 +927,7 @@ render();
     const A = "color:#a8301f;font-family:monospace;font-size:12px";
     const D = "color:#888;font-family:monospace;font-size:12px";
     const line = (s, c = D) => console.log("%c" + s, c);
+    const ok = (s) => line(s, A);
 
     /* 1. A console banner for whoever opens devtools first. */
     console.log("%c" + [
@@ -943,9 +944,10 @@ render();
     const ret = (v) => v;
     window.help = () => (
       line("available:", A),
-      line("  whoami()   sudo()   ls()   nmap()   exploit()   flag()   matrix()"),
+      line("  whoami()   ls()   cd(dir)   cat(file)   sudo()   nmap()"),
+      line("  exploit()   flag()   matrix()"),
       line("  and press ~ on the page for root mode (konami code works too)."),
-      ret("try one.")
+      ret("try one. some of them lead somewhere.")
     );
     window.whoami = () => (
       line("manan patel  aka 0xManan", A),
@@ -953,7 +955,34 @@ render();
       ret("you. probably.")
     );
     window.sudo = (c) => (line("[sudo] password for guest: ********"), line("nice try.", A), ret("guest is not in the sudoers file. this incident will be reported."));
-    window.ls = () => (line("disclosures/   audits/   blogs/   .secrets/"), ret(".secrets/ is not for you (yet)."));
+
+    /* A tiny fake filesystem so ls/cd/cat feel like a real shell. */
+    let cwd = "~";
+    const FS = {
+      "~": ["disclosures/", "audits/", "blogs/", ".secrets/"],
+      ".secrets": ["flag.txt", "note.md"],
+    };
+    const FILES = {
+      "flag.txt": "flag{you_read_the_source_now_read_the_code}",
+      "note.md":
+        "you dug this far, so - hi. if you found something real in here, or in\n" +
+        "anything I've disclosed, that's the best possible way to say hello.\n" +
+        "mail: " + I.email + "  //  the good bugs get a reply within the hour.",
+    };
+    window.ls = () => (line((FS[cwd] || []).join("   ")), ret(cwd === "~" ? "the last one isn't for everyone." : ""));
+    window.cd = (dir = "") => {
+      dir = String(dir).replace(/^\.\//, "").replace(/\/$/, "");
+      if (dir === "" || dir === "~" || dir === "..") { cwd = "~"; return ret("~"); }
+      if ((dir === ".secrets" || dir === "secrets") ) { cwd = ".secrets"; ok("access granted. you actually looked."); line("ls   ->   flag.txt   note.md"); return ret("~/.secrets"); }
+      if (["disclosures", "audits", "blogs"].includes(dir)) { location.hash = "#/" + dir; return ret("opening /" + dir + " ..."); }
+      return ret("cd: " + dir + ": No such file or directory");
+    };
+    window.cat = (f = "") => {
+      f = String(f).replace(/^\.secrets\//, "").replace(/^\.\//, "");
+      if (f === "/etc/passwd" || f === "etc/passwd") return ret("nice try.");
+      if (FILES[f]) { (f === "flag.txt" ? ok : line)(FILES[f]); return ret(""); }
+      return ret("cat: " + f + ": No such file or directory");
+    };
     window.nmap = () => (line("Starting scan..."), line("PORT    STATE  SERVICE"), line("443/tcp open   https"), line("host is clean.", A), ret("try harder."));
     window.exploit = () => (line("no live targets here.", A), ret("the ones that ARE fixed are on /disclosures."));
     window.flag = () => (line("close. the flag isn't in the console.", A), ret("view-source, or the network tab, or /.well-known/ ... somewhere."));
