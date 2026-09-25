@@ -598,8 +598,24 @@ function viewReport(slug) {
   </div>`;
 }
 
+/* Pin the article content column's right edge to the right edge of the "INDEX"
+   nav word. The nav is right-aligned so this is viewport-dependent; measure it
+   live. Below the two-column breakpoint, clear the override so mobile stacks. */
+function alignPostwrap() {
+  const wrap = document.querySelector(".art-wrap.postwrap");
+  if (!wrap) return;
+  const main = wrap.querySelector(".postmain");
+  const idx = [...document.querySelectorAll(".nav a")]
+    .find((a) => a.textContent.trim().toLowerCase() === "index");
+  if (!main || !idx || innerWidth <= 920) { wrap.style.gridTemplateColumns = ""; return; }
+  const colW = Math.round(idx.getBoundingClientRect().right - main.getBoundingClientRect().left);
+  if (colW > 340) wrap.style.gridTemplateColumns = `${colW}px minmax(0,1fr)`;
+}
+addEventListener("resize", alignPostwrap, { passive: true });
+
 let tocSpy;
 function wireToc() {
+  alignPostwrap();
   tocSpy?.disconnect();
   const links = [...document.querySelectorAll(".toc a")];
   const heads = links.map((a) => document.getElementById(a.getAttribute("href").slice(1))).filter(Boolean);

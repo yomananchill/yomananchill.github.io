@@ -376,8 +376,11 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 /* Blog posts: header and body share one column so their left AND right edges
    line up; the TOC sits in the right rail. The content column is capped to a
    comfortable measure so lines don't stretch, leftover becomes a right margin. */
+/* content column width is set live to the right edge of the "INDEX" nav word
+   (see alignPostwrap in app.js); this is the fallback before/without JS. */
 .art-wrap.postwrap{grid-template-columns:minmax(0,1fr) 200px;gap:var(--s8)}
 .postmain{min-width:0}
+.postwrap .toc{justify-self:end;width:200px}
 .postwrap .prose{max-width:none}
 /* justify body copy so the right edge is flush; hyphenate to avoid big gaps.
    Covers article prose (disclosures + posts) and the home's readable paragraphs. */
