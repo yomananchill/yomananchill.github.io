@@ -374,8 +374,10 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 .art-wrap{display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s8);
   padding-bottom:var(--s9)}
 /* Blog posts: header and body share one column so their left AND right edges
-   line up; the TOC sits in the right rail. */
-.art-wrap.postwrap{grid-template-columns:minmax(0,1fr) 200px}
+   line up; the TOC sits in the right rail. The content column is capped to a
+   comfortable measure so lines don't stretch, leftover becomes a right margin. */
+.art-wrap.postwrap{grid-template-columns:minmax(0,44rem) 200px;
+  justify-content:start;gap:var(--s8)}
 .postmain{min-width:0}
 .postwrap .prose{max-width:none}
 /* justify body copy so the right edge is flush; hyphenate to avoid big gaps.
