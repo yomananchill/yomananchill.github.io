@@ -386,7 +386,12 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
    Covers article prose (disclosures + posts) and the home's readable paragraphs. */
 .prose p,.prose li,.hero-lede,.step p,.row p,.row li{text-align:justify;
   -webkit-hyphens:auto;hyphens:auto}
-@media (max-width:920px){.art-wrap.postwrap .toc{display:none}}
+@media (max-width:920px){
+  /* collapse to one column: the hidden TOC track was still reserving 200px,
+     squeezing the content column to a sliver on phones */
+  .art-wrap.postwrap{grid-template-columns:1fr}
+  .art-wrap.postwrap .toc{display:none}
+}
 .toc{position:sticky;top:calc(var(--topbar-h,56px) + var(--s5));align-self:start;
   max-height:calc(100dvh - var(--topbar-h,56px) - var(--s7));overflow:auto}
 .toc h4{font-family:var(--ui);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
@@ -602,13 +607,19 @@ a.box:hover{border-color:var(--accent);background:var(--bg-2);transform:translat
 
 @media (max-width:760px){
   .shell,.foot-in{padding:0 var(--s4)}
-  .topbar-in{padding:var(--s3) var(--s4);gap:var(--s3);flex-wrap:wrap}
+  /* topbar stacks: brand + theme on row 1, nav on its own row below */
+  .topbar-in{padding:var(--s3) var(--s4);gap:var(--s2) var(--s3);flex-wrap:wrap;align-items:center}
   .topbar.condensed .topbar-in{padding:var(--s2) var(--s4)}
-  .nav{margin-left:auto;gap:0}
-  .nav a{padding:var(--s2)}
+  .brand{order:1}
+  .theme{order:2;margin-left:auto}
+  .nav{order:3;flex-basis:100%;margin-left:0;flex-wrap:wrap;gap:0 var(--s2)}
+  .nav a{padding:var(--s2) 0;margin-right:var(--s3);letter-spacing:.1em}
+  /* the ambient hex field competes with body text on a narrow screen */
+  .bgfield{opacity:.14}
   .section{padding:var(--s8) 0}
   .hero{padding:var(--s8) 0 var(--s6)}
   .filter-row{flex-direction:column;align-items:stretch}
+  .search{flex:0 0 auto;width:100%}   /* stop flex-grow stretching it vertically */
   .field{justify-content:space-between}
   .field select{flex:1;margin-left:var(--s3)}
   .sort{margin-left:0}
