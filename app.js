@@ -539,26 +539,19 @@ function viewReport(slug) {
       <span>${esc(r.cve || r.cls)}</span>
     </div>
 
-    <header class="art-head">
-      <p class="art-eyebrow"><b>${esc(r.cls)}</b>${(r.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}</p>
-      <h1>${esc(r.title)}</h1>
-      ${r.deck ? `<p class="art-deck">${esc(r.deck)}</p>` : ""}
-      <p class="art-byline">
-        <span class="who">${esc(I.name)}</span>
-        <span>${esc(fmt(r.date))}</span>
-        <span>${Math.max(1, Math.round(words / 200))} min read</span>
-        ${sevTag(r)}
-      </p>
-    </header>
-
-    <div class="art-wrap">
-      <nav class="toc" aria-label="On this page">
-        <h4>On this page</h4>
-        <ol>
-          ${sections.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a></li>`).join("")}
-          <li><a href="#details">Details</a></li>
-        </ol>
-      </nav>
+    <div class="art-wrap postwrap">
+      <div class="postmain">
+        <header class="art-head">
+          <p class="art-eyebrow"><b>${esc(r.cls)}</b>${(r.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}</p>
+          <h1>${esc(r.title)}</h1>
+          ${r.deck ? `<p class="art-deck">${esc(r.deck)}</p>` : ""}
+          <p class="art-byline">
+            <span class="who">${esc(I.name)}</span>
+            <span>${esc(fmt(r.date))}</span>
+            <span>${Math.max(1, Math.round(words / 200))} min read</span>
+            ${sevTag(r)}
+          </p>
+        </header>
 
       <article class="prose">
         ${sections.map(([id, t, b]) => `<h2 id="${id}">${esc(t)}</h2><p>${esc(b)}</p>`).join("")}
@@ -592,6 +585,15 @@ function viewReport(slug) {
           ${next ? `<a class="nx" href="#/r/${esc(next.slug)}"><span>Next &rarr;</span><b>${esc(next.short)}</b></a>` : "<span></span>"}
         </div>
       </article>
+      </div>
+
+      <nav class="toc" aria-label="On this page">
+        <h4>On this page</h4>
+        <ol>
+          ${sections.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a></li>`).join("")}
+          <li><a href="#details">Details</a></li>
+        </ol>
+      </nav>
     </div>
   </div>`;
 }
