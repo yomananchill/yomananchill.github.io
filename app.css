@@ -378,8 +378,9 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 .art-wrap.postwrap{grid-template-columns:minmax(0,1fr) 200px}
 .postmain{min-width:0}
 .postwrap .prose{max-width:none}
-/* justify body copy so the right edge is flush; hyphenate to avoid big gaps */
-.postwrap .prose p,.postwrap .prose li{text-align:justify;
+/* justify body copy so the right edge is flush; hyphenate to avoid big gaps.
+   Covers article prose (disclosures + posts) and the home's readable paragraphs. */
+.prose p,.prose li,.hero-lede,.step p,.row p,.row li{text-align:justify;
   -webkit-hyphens:auto;hyphens:auto}
 @media (max-width:920px){.art-wrap.postwrap .toc{display:none}}
 .toc{position:sticky;top:calc(var(--topbar-h,56px) + var(--s5));align-self:start;
