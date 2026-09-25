@@ -148,16 +148,18 @@
         }
       }
 
-      // cursor layer: 1px crosshair, an 8x8 marker, and a live readout
+      // cursor layer: 1px crosshair, an 8x8 marker, and a live readout.
+      // Confined to the memory view (right of startX) so it never sweeps across
+      // the reading column on the left.
       uctx.clearRect(0, 0, W, H);
-      if (inReticle) {
+      if (inReticle && rx >= startX) {
         const x = Math.round(rx) + 0.5, y = Math.round(ry) + 0.5;
 
         uctx.globalAlpha = 0.14 * power;
         uctx.strokeStyle = INK;
         uctx.lineWidth = 1;
         uctx.beginPath();
-        uctx.moveTo(0, y); uctx.lineTo(W, y);
+        uctx.moveTo(startX, y); uctx.lineTo(W, y);
         uctx.moveTo(x, 0); uctx.lineTo(x, H);
         uctx.stroke();
 
