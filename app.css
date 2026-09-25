@@ -250,10 +250,11 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
   color:var(--fg-3);line-height:1.7}
 .nr-list{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);font-family:var(--display);
   font-size:clamp(18px,1.9vw,23px);line-height:1.45}
-.nr-list a{color:var(--fg);transition:color var(--fast) var(--ease)}
-.nr-list a:hover{color:var(--accent)}
+.nr-list span{color:var(--fg);white-space:nowrap}
+.nr-list .plogo{width:20px;height:20px;object-fit:contain;border-radius:4px;
+  vertical-align:-4px;margin-right:9px;background:#fff;padding:1px}
 /* the separator trails its own name, so a wrapped line never starts with one */
-.nr-list a:not(:last-child)::after{content:" ·";color:var(--line-2)}
+.nr-list span:not(:last-child)::after{content:" ·";color:var(--line-2)}
 
 /* ─────────────────────────── report cards ─────────────────────────── */
 .cards{display:grid;gap:var(--s4)}
@@ -372,6 +373,15 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 
 .art-wrap{display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s8);
   padding-bottom:var(--s9)}
+/* Blog posts: header and body share one column so their left AND right edges
+   line up; the TOC sits in the right rail. */
+.art-wrap.postwrap{grid-template-columns:minmax(0,1fr) 200px}
+.postmain{min-width:0}
+.postwrap .prose{max-width:none}
+/* justify body copy so the right edge is flush; hyphenate to avoid big gaps */
+.postwrap .prose p,.postwrap .prose li{text-align:justify;
+  -webkit-hyphens:auto;hyphens:auto}
+@media (max-width:920px){.art-wrap.postwrap .toc{display:none}}
 .toc{position:sticky;top:calc(var(--topbar-h,56px) + var(--s5));align-self:start;
   max-height:calc(100dvh - var(--topbar-h,56px) - var(--s7));overflow:auto}
 .toc h4{font-family:var(--ui);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
@@ -402,6 +412,9 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 .prose h2{font-size:clamp(24px,3vw,32px);margin:var(--s8) 0 var(--s4);
   scroll-margin-top:calc(var(--topbar-h,56px) + var(--s5))}
 .prose h2:first-child{margin-top:0}
+/* anchored jumps must clear the sticky topbar for every heading level */
+.prose h3,.prose h4{scroll-margin-top:calc(var(--topbar-h,56px) + var(--s5))}
+.prose h3:first-child,.prose h4:first-child{margin-top:0}
 .prose p{font-size:15px;line-height:1.75;color:var(--fg-2);margin-bottom:var(--s4)}
 .prose code{font-size:12.5px;background:var(--bg-3);padding:1px 5px;border-radius:2px;
   color:var(--fg)}
@@ -448,9 +461,11 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
    (and by 2 on narrow); revisit these if the cert count stops being a multiple. */
 .certs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
   background:var(--line);border:1px solid var(--line)}
-.cert{background:var(--bg);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s2);
+.cert{position:relative;background:var(--bg);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s2);
   transition:background var(--mid) var(--ease)}
 .cert:hover{background:var(--bg-2)}
+.certlogo{position:absolute;top:var(--s5);right:var(--s5);width:26px;height:26px;
+  object-fit:contain;border-radius:5px;background:#fff;padding:2px}
 .cert b{font-family:var(--display);font-weight:400;font-size:clamp(26px,3vw,34px);
   line-height:1;letter-spacing:-.02em}
 .cert-full{font-size:12px;color:var(--fg-2);line-height:1.5}
@@ -463,6 +478,21 @@ a.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-
 /* ─────────────────────────── audits ─────────────────────────── */
 .audit-note{border-left:2px solid var(--line-2);padding:var(--s2) 0 var(--s2) var(--s4);
   margin-bottom:var(--s7);font-size:13px;line-height:1.7;color:var(--fg-2);max-width:60ch}
+
+/* project cards: official logo + name + category */
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+.acard{background:var(--bg);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s3);
+  min-height:150px;font-family:var(--ui);color:var(--fg);transition:background var(--mid) var(--ease)}
+.acard:hover{background:var(--bg-2)}
+.acard-logo{width:36px;height:36px;object-fit:contain;border-radius:7px;background:#fff;padding:3px}
+.acard-name{font-family:var(--display);font-size:var(--t-item);line-height:1.05}
+.acard-foot{display:flex;flex-direction:column;gap:var(--s2)}
+.acard-area{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-3)}
+.acard-langs{display:flex;flex-wrap:wrap;gap:var(--s1)}
+.acard-langs b{font-weight:400;font-size:10px;letter-spacing:.1em;padding:2px var(--s2);
+  border:1px solid var(--line-2);color:var(--fg-3)}
+.acard-langs b:first-child{color:var(--fg-2);border-color:var(--fg-3)}
 /* borders live on the tiles, so a short last row leaves no filled dead cell */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
   border-top:1px solid var(--line);border-left:1px solid var(--line)}

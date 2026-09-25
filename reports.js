@@ -17,6 +17,25 @@
 const REPORTS = [
   /* ───────────────────────── verified fixed ───────────────────────── */
   {
+    slug: "libreoffice-emf-drawbeziers-dos",
+    depth: "full", credited: true,
+    title: "Uncontrolled Iteration In The EMF+ DrawBeziers Record",
+    short: "180 Bytes That Eat All Your RAM",
+    deck: "A point count that steps by three can never reach 0xffffffff. It wraps past 2^32 and loops forever, allocating until the process dies.",
+    repo: "LibreOffice/core", cls: "Denial of Service", sev: "medium", cvss: "6.5",
+    date: "2026-09-20", state: "Fixed", cve: "",
+    ident: "gerrit 211331", fixedIn: "LibreOffice 26.8",
+    url: "https://gerrit.libreoffice.org/c/core/+/211331",
+    tags: ["Document Parsing", "Denial of Service"],
+    summary:
+      "The EMF+ DrawBeziers handler in drawinglayer/source/tools/emfphelperdata.cxx reads a 32-bit Count from the record and validates only that it is at least 4, never against the bytes actually present. The point loop increments a sal_uInt32 by three and compares it with <= against Count, so a crafted Count drives a non-terminating loop and unbounded polygon allocation. Any document embedding the metafile renders it on open.",
+    root:
+      "The loop counter starts at 4 and steps by 3, so it is always 1 (mod 3). With Count = 0xFFFFFFFF, which is 0 (mod 3), the counter can never equal Count; it climbs to 0xFFFFFFFD, overflows on the next += 3 back to 0, and repeats. There is no rMS.good() check, so once the tiny record is consumed ReadPoint keeps returning zeros, and every iteration calls appendBezierSegment - an unbounded allocation on top of an infinite loop. The only guard, `if (aCount < 4) break;`, checks a floor and never a ceiling.",
+    impact:
+      "EMF images embedded in DOCX, ODT, PPTX and similar are auto-rendered on open, so a victim only has to open a document - no macros, no interaction. A ~180-byte file drives soffice from baseline to about 4 GB resident in ~22 seconds before the allocator fails or the host is driven out of memory.",
+    fix: "Bound Count by the points that fit in the remaining record data (as sibling handlers do with remainingSize()), check rMS.good() inside the loop, and use a loop bound that unsigned wraparound cannot step over. Landed as \"emf+: limit the bezier points to what the record holds\", crediting the finder in the commit.",
+  },
+  {
     slug: "keras-tfsmlayer-safe-mode-bypass",
     depth: "full", credited: true,
     title: "TFSMLayer Bypasses safe_mode, Executing Attacker Graphs At Inference",

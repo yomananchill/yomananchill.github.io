@@ -34,6 +34,7 @@ const NAMES = {
   "feast-dev/feast": "Feast",
   "huggingface/transformers": "Transformers",
   "parisneo/lollms": "LoLLMs",
+  "LibreOffice/core": "LibreOffice",
 };
 const pretty = (repo) => NAMES[repo] || repo;
 
@@ -187,13 +188,19 @@ const cardHTML = (r, i = 0) => {
   </a>`;
 };
 
-const tileHTML = (p, i = 0) => `
-  <div class="tile reveal" style="--i:${i}">
-    <span class="area">${esc(p.area)}</span>
-    <h3>${esc(p.name)}</h3>
-    <p>${esc(p.note)}</p>
-    <span class="langs">${p.langs.map((l) => `<b>${esc(l)}</b>`).join("")}</span>
+const acardHTML = (p, i = 0) => {
+  const slug = p.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return `
+  <div class="acard reveal" style="--i:${i}">
+    <img class="acard-logo" src="assets/logos/${esc(slug)}.png" alt="" loading="lazy"
+         onerror="this.style.visibility='hidden'">
+    <span class="acard-name">${esc(p.name)}</span>
+    <div class="acard-foot">
+      <span class="acard-area">${esc(p.area)}</span>
+      <span class="acard-langs">${p.langs.map((l) => `<b>${esc(l)}</b>`).join("")}</span>
+    </div>
   </div>`;
+};
 
 /* ------------------------------------------------------------------ home */
 
@@ -229,7 +236,10 @@ function viewHome() {
         <div class="namerow">
           <span class="nr-label">Working through<br>and disclosed findings</span>
           <p class="nr-list">${projects
-            .map((p) => `<a href="${esc(p.href)}">${esc(p.name)}</a>`)
+            .map((p) => {
+              const slug = p.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+              return `<span><img class="plogo" src="assets/logos/${slug}.png" alt="" loading="lazy" onerror="this.remove()">${esc(p.name)}</span>`;
+            })
             .join("")}</p>
         </div>
       </div>
@@ -279,12 +289,16 @@ function viewHome() {
       <div class="certs">
         ${DATA.clearances
           .map(
-            (c, i) => `<div class="cert reveal" style="--i:${i}">
+            (c, i) => {
+              const slug = c.by.toLowerCase().replace(/[^a-z0-9]/g, "");
+              return `<div class="cert reveal" style="--i:${i}">
+              <img class="certlogo" src="assets/logos/certs/${slug}.png" alt="" loading="lazy" onerror="this.remove()">
               <b>${esc(c.id)}</b>
               <span class="cert-full">${esc(c.full)}</span>
               <span class="cert-by">${esc(c.by)}</span>
               <span class="cert-group">${esc(c.group)}</span>
-            </div>`
+            </div>`;
+            }
           )
           .join("")}
       </div>
@@ -563,7 +577,7 @@ function viewReport(slug) {
               class="${r.credited ? "" : "not-mine"}">${esc(identOf(r))} &nearr;</a></dd>
           </div>` : ""}
           <div><dt>Credit</dt><dd>${r.credited
-            ? "Assigned to this report"
+            ? (r.cve ? "Assigned to this report" : "Credited in the upstream fix")
             : "Found independently; filed second"}</dd></div>
         </dl>
 
@@ -600,45 +614,20 @@ function wireToc() {
 
 /* ----------------------------------------------------------------- audits */
 
-let AUDIT_LANG = "";
-
 function viewAudits() {
-  const langs = [...new Set(AUDITS.projects.flatMap((p) => p.langs))].sort();
   return `
   <div class="shell pb">
     <div class="crumbs"><a href="#/">Index</a> <span>/</span> <span>Audits</span></div>
     <h1 class="page-h1">Where I've been reading</h1>
     <p class="page-lede">${esc(AUDITS.note)}</p>
 
-    <div class="chiprow standalone">
-      <span class="chip-label">Language</span>
-      <div class="chips" id="lang-chips">
-        ${langs.map((l) => `<button class="chip" data-lang="${esc(l)}" aria-pressed="${String(l === AUDIT_LANG)}">${esc(l)}</button>`).join("")}
-      </div>
-    </div>
-
     <h2 class="sr-only">Codebases</h2>
-    <div class="grid" id="tiles"></div>
+    <div class="acards">${AUDITS.projects.map((p, i) => acardHTML(p, i)).join("")}</div>
   </div>`;
 }
 
-function paintTiles() {
-  const shown = AUDITS.projects.filter((p) => !AUDIT_LANG || p.langs.includes(AUDIT_LANG));
-  document.querySelector("#tiles").innerHTML = shown.map(tileHTML).join("");
-  revealAll();
-}
-
 function wireAudits() {
-  document.querySelectorAll("#lang-chips .chip").forEach((b) => {
-    b.addEventListener("click", () => {
-      AUDIT_LANG = AUDIT_LANG === b.dataset.lang ? "" : b.dataset.lang;
-      document.querySelectorAll("#lang-chips .chip").forEach((x) =>
-        x.setAttribute("aria-pressed", String(x.dataset.lang === AUDIT_LANG)));
-      paintTiles();
-      history.replaceState(null, "", "#/audits" + (AUDIT_LANG ? "?lang=" + encodeURIComponent(AUDIT_LANG) : ""));
-    });
-  });
-  paintTiles();
+  revealAll();
 }
 
 /* ------------------------------------------------------------- writing */
@@ -740,6 +729,7 @@ function viewPost(slug) {
       const res = await fetch(`posts/${encodeURIComponent(slug)}.md`, { cache: "no-cache" });
       if (!res.ok) throw new Error(res.status);
       body.innerHTML = md(await res.text());
+      buildPostToc();
     } catch {
       body.innerHTML =
         `<p class="empty">This post's file could not be loaded.<br>` +
@@ -754,15 +744,32 @@ function viewPost(slug) {
       <a href="#/blogs">Blogs</a> <span>/</span>
       <span>${esc(p.date)}</span>
     </div>
-    <header class="art-head">
-      <p class="art-eyebrow">${(p.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}</p>
-      <h1>${esc(p.title)}</h1>
-      ${p.summary ? `<p class="art-deck">${esc(p.summary)}</p>` : ""}
-      <p class="art-byline"><span class="who">${esc(I.name)}</span><span>${esc(fmt(p.date))}</span></p>
-    </header>
-    <article class="prose" id="post-body"><p class="empty">Loading…</p></article>
-    <div style="padding-bottom:var(--s9)"></div>
+    <div class="art-wrap postwrap">
+      <div class="postmain">
+        <header class="art-head">
+          <p class="art-eyebrow">${(p.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}</p>
+          <h1>${esc(p.title)}</h1>
+          ${p.summary ? `<p class="art-deck">${esc(p.summary)}</p>` : ""}
+          <p class="art-byline"><span class="who">${esc(I.name)}</span><span>${esc(fmt(p.date))}</span></p>
+        </header>
+        <article class="prose" id="post-body"><p class="empty">Loading…</p></article>
+      </div>
+      <nav class="toc" id="post-toc" aria-label="On this page"></nav>
+    </div>
   </div>`;
+}
+
+/* Build the post's "On this page" nav from the headings the Markdown renderer
+   emitted (## becomes h3, with an id already set), then wire scroll-spy. */
+function buildPostToc() {
+  const nav = document.querySelector("#post-toc");
+  const heads = [...document.querySelectorAll("#post-body h3[id], #post-body h2[id]")];
+  if (!nav || heads.length < 2) { nav?.remove(); return; }
+  nav.innerHTML =
+    `<h4>On this page</h4><ol>` +
+    heads.map((h) => `<li><a href="#${h.id}">${esc(h.textContent)}</a></li>`).join("") +
+    `</ol>`;
+  wireToc();
 }
 
 /* A chip row that wraps to leave a single item on the last line reads as a
@@ -865,7 +872,6 @@ function paint() {
   } else if (path.startsWith("/b/") || path.startsWith("/w/")) {
     main.innerHTML = viewPost(path.slice(3));
   } else if (path === "/audits") {
-    AUDIT_LANG = params.get("lang") || "";
     main.innerHTML = viewAudits();
     wireAudits();
   } else {
