@@ -214,7 +214,7 @@ function viewHome() {
   const reading = AUDITS.projects
     .filter((p) => !hit.some((h) => h.name.toLowerCase() === p.name.toLowerCase()))
     .map((p) => ({ name: p.name, href: `#/audits?lang=${encodeURIComponent(p.langs[0])}`, found: false }));
-  const projects = [...hit, ...reading];
+  const projects = [...hit, ...reading, { name: "Microsoft" }, { name: "Google" }];
 
   const groups = [...new Set(DATA.clearances.map((c) => c.group))];
 
