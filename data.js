@@ -15,7 +15,7 @@ const DATA = {
     twitter: "0xManan",
     linkedin: "manan-patel-4330101b4",
     summary:
-      "My education in security mostly came from asking one question: what happens if I use this in a way nobody expected? That led me from hacking software for curiosity to researching vulnerabilities in AI frameworks and the open-source infrastructure that modern systems quietly depend on.",
+      "My education in security mostly came from asking one question: what happens if I use this in a way nobody expected? That led me from hacking software for curiosity to researching vulnerabilities in AI frameworks and the open-source infrastructure that modern systems quietly depend on.",
     signature: "M. Patel",
     tagline: "I'm weird, I hack.",
     payline: "Fintech security and compliance in Bengaluru pays for it.",

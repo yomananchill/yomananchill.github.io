@@ -221,7 +221,7 @@ html.anim .reveal.in{
   margin-bottom:var(--s5);max-width:15ch}
 .hero h1 em{font-style:italic;color:var(--fg-3)}
 .hero-lede{font-family:var(--display);font-size:clamp(17px,2vw,23px);line-height:1.5;
-  color:var(--fg-2);max-width:54ch;margin-bottom:var(--s4)}
+  color:var(--fg-2);max-width:54ch;margin-bottom:var(--s4);text-wrap:pretty}
 .hero-pay{font-family:var(--display);font-size:clamp(15px,1.7vw,19px);color:var(--fg-3);
   max-width:60ch;margin-bottom:var(--s6);text-wrap:pretty}
 .hero-meta{display:flex;flex-wrap:wrap;gap:var(--s3)}
